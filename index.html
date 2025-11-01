@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizUpia!</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+</head>
+<body class="bg-blue-600 relative">
+    <!-- Til tanlash -->
+    <div class="absolute top-2 right-2">
+        <select aria-label="Tilni tanlang"
+            class="appearance-none font-bold outline-none py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm bg-white">
+            <option value="uz">UZB</option>
+            <option value="ru">РУС</option>
+            <option value="en">ENG</option>
+        </select>
+    </div>
+
+    <!-- Asosiy blok -->
+    <div class="flex flex-col items-center justify-center h-screen">
+        <h1 class="kahoot-font text-4xl text-white mb-8" style="font-family: 'Luckiest Guy', cursive;">
+            QuizUpia!
+        </h1>
+
+        <div class="bg-white p-4 rounded-lg shadow-lg w-80 text-center">
+            <input id="pinInput" type="text" placeholder="Game PIN"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+
+            <button onclick="checkPIN()"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition">
+                Enter
+            </button>
+        </div>
+
+        <a href="create.html" class="text-white font-bold mt-4 cursor-pointer">O'yin yaratish</a>
+    </div>
+
+    <script>
+        function checkPIN() {
+            const correctPIN = "xayrullayeva0527"; // ✅ bu joyda sizning maxfiy kod
+            const userPIN = document.getElementById("pinInput").value.trim();
+
+            if (userPIN === correctPIN) {
+                window.location.href = "questions.html"; // to‘g‘ri kod → test sahifasiga o‘tadi
+            } else if (userPIN === "") {
+                alert("Iltimos, PIN kiriting!");
+            } else {
+                alert("❌ Noto‘g‘ri PIN! Qayta urinib ko‘ring.");
+            }
+        }
+    </script>
+</body>
+</html>

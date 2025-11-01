@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Molekulyar genetika testi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #2563eb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      padding: 10px;
+    }
+    h1 {
+        padding-bottom: 10px;
+    }
+    .questions section {
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: 100%;
+      max-width: 600px;
+    }
+    .questions img {
+      width: 100%;
+      max-height: 900px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    .questions button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background-color: white;
+      color: #2563eb;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+    .questions button:hover {
+      background: rgba(255,255,255,0.9);
+    }
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* 2x2 tartib */
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    h1 { font-size: 1.3rem; color: white; margin-bottom: 10px; }
+    p { color: white; font-size: 0.95rem; }
+    .mt-4 { margin-top: 1rem; }
+    .mt-6 { margin-top: 1.5rem; }
+  </style>
+</head>
+
+<body class="questions">
+  <div id="quiz-container"></div>
+
+  <script>
+    const allQuestions = [
+      // --- Oldingi 15 ta savol ---
+      { img: "img/test.jfif", question: "Molekulyar genetika nimani o‘rganadi?", answers: ["Hujayra tuzilishini","Irsi axborotning molekulyar asoslarini","O‘simliklarning ko‘payishini","Evolyutsion jarayonlarni"], correct: 1 },
+      { img: "img/test2.jpg", question: "DNKning asosiy vazifasi nima?", answers: ["Energiya ishlab chiqish","Irsi axborotni saqlash va uzatish","Hujayrani himoya qilish","Oqsillarni parchalanish"], correct: 1 },
+      { img: "img/test4.jfif", question: "DNK tarkibidagi azotli asoslar qaysilar?", answers: ["Adenin, urasil, guanin, sitozin","Adenin, timin, guanin, sitozin","Adenin, timin, guanin, urasil","Timid, guanid, sitid, adenid"], correct: 1 },
+      { img: "img/test5.jfif", question: "RNTda timin o‘rniga qaysi asos uchraydi?", answers: ["Sitozin","Guanin","Urasil","Adenin"], correct: 2 },
+      { img: "img/test6.jpg", question: "DNKning ikki zanjiri qanday usulda birikkan?", answers: ["Ion bog‘lari bilan","Vodorod bog‘lari bilan","Kovalent bog‘lar bilan","Peptid bog‘lari bilan"], correct: 1 },
+      { img: "img/test6.jpg", question: "Transkripsiya jarayoni qayerda sodir bo‘ladi?", answers: ["Sitoplazmada","Yadroda","Mitoxondriyada","Ribosomada"], correct: 1 },
+      { img: "img/test2.jpg", question: "Translyatsiya jarayoni natijasida nima hosil bo‘ladi?", answers: ["RNT molekulasi","Oqsil zanjiri","DNK molekulasi","Xromosoma"], correct: 1 },
+      { img: "img/test.jfif", question: "Kodon nima?", answers: ["DNKdagi 3 ta nukleotid bilan ifodalangan aminokislota ketma-ketligi","Oqsilning asosiy tarkibi","RNTning uzunligi","Ribosomaning qismi"], correct: 0 },
+      { img: "img/test4.jfif", question: "Gen nimani bildiradi?", answers: ["Energiya manbai","Irsi axborot birligi","Hujayra bo‘linish nuqtasi","Protein molekulasi"], correct: 1 },
+      { img: "img/test5.jfif", question: " Genom nima?", answers: ["Hujayradagi barcha xromosomalar va ularning DNKsi","Faqat bitta xromosoma","Ribosoma va mitoxondriya","Oqsil to‘plami"], correct: 0 },
+      { img: "img/test6.jpg", question: " Mutatsiya nima?", answers: ["DNKdagi o‘zgarishlar","DNKning to‘liq yo‘qolishi","Oqsil sintezi","Hujayra bo‘linishi"], correct: 0 },
+      { img: "img/test2.jpg", question: " Replikatsiya jarayoni natijasida nima hosil bo‘ladi?", answers: ["DNKning nusxasi","Oqsil","RNT","Xromatin"], correct: 0 },
+      { img: "img/test.jfif", question: " Mezomorfa DNK sintezi qanday usulda sodir bo‘ladi?", answers: ["Har bir yangi DNK molekulasi bir eski zanjir va bir yangi zanjirdan tashkil topadi","Faqat yangi zanjirlar hosil bo‘ladi","Faqat eski zanjirlar nusxalanadi","Yangi zanjirlar to‘liq tasodifiy hosil bo‘ladi"], correct: 0 },
+      { img: "img/test4.jfif", question: " Ribosoma qayerda joylashgan?", answers: ["Sitoplazmada yoki ER yuzasida","Yadro ichida","Mitoxondriyada","Xromosomada"], correct: 0 },
+      { img: "img/test5.jfif", question: " Genetik kodning xossasi nima?", answers: ["Universal va degenerate (takrorlanuvchi)","Faqat insonlarda bir xil","O‘zgarmas va faqat bir nukleotiddan iborat","Faqat DNK zanjirida"], correct: 0 },
+
+      // --- Yangi 15 ta genetika savollar ---
+      {img: "img/test6.jpg", question: "Allell genlar deganda nimani tushunasiz?", answers: ["Turli xromosomalarda joylashgan genlar","Bir xil belgini boshqaruvchi genlar jufti","Bir-biriga qarama-qarshi belgilarni boshqaruvchi genlar","Bir-birini to‘ldiruvchi genlar"], correct: 1 },
+      {img: "img/test2.jpg", question: "Dominant gen deganda nimani tushunasiz?", answers: ["Belgini faqat gomozigot holatda namoyon etuvchi gen","Belgini faqat geterozigot holatda ifodalovchi gen","Belgini geterozigot holatda ham ifodalovchi gen","Belgini umuman ifodalamaydigan gen"], correct: 2 },
+      {img: "img/test.jfif", question: "Rezessiv gen qachon ifodalanadi?", answers: ["Har doim","Faqat gomozigot holatda","Faqat geterozigot holatda","Hech qachon"], correct: 1 },
+      {img: "img/test4.jfif", question: "Kodominantlik bu —", answers: ["Dominant genning to‘liq ustunligi","Ikkala genning belgisi birgalikda namoyon bo‘lishi","Rezessiv genning yashirin holati","Mutatsiya natijasida genlarning o‘zgarishi"], correct: 1 },
+      {img: "img/test5.jfif", question: "To‘liq bo‘lmagan dominantlik misolida qanday holat kuzatiladi?", answers: ["Belgining oraliq shaklda ifodalanishi","Belgining yo‘qolishi","Faqat recessiv belgi ifodalanishi","Mutatsiya sodir bo‘lishi"], correct: 0 },
+      {img: "img/test6.jpg", question: "Qizil va oq gulli o‘simlikni chatishtirganda pushti gulli duragay paydo bo‘lishi — bu:", answers: ["To‘liq dominantlik","Rezessivlik","To‘liq bo‘lmagan dominantlik","Kodominantlik"], correct: 2 },
+      {img: "img/test2.jpg", question: "Insonning qon gruppalaridagi A va B genlari o‘zaro qanday ta’sirda bo‘ladi?", answers: ["To‘liq dominantlik","Kodominantlik","Rezessivlik","To‘liq bo‘lmagan dominantlik"], correct: 1 },
+      {img: "img/test.jfif", question: "Oq va qora sigirlarni chatishtirganda kulrang sigir paydo bo‘lsa, bu —", answers: ["Kodominantlik","To‘liq bo‘lmagan dominantlik","To‘liq dominantlik","Rezessivlik"], correct: 1 },
+      {img: "img/test4.jfif", question: "Genotipda ikkala allel ham bir xil bo‘lsa, bu holat —", answers: ["Geterozigot","Gomozigot","Dominant","Rezessiv"], correct: 1 },
+      {img: "img/test5.jfif", question: " Genotip “Aa” bo‘lsa, bu —", answers: ["Gomozigot dominant","Gomozigot recessiv","Geterozigot","Mutant"], correct: 2 },
+      {img: "img/test6.jpg", question: " Dominant allel belgini ifodalash uchun nechta nusxada bo‘lishi yetarli?", answers: ["Ikktasi","Bittasi","Uchta","Hech biri"], correct: 1 },
+      {img: "img/test2.jpg", question: " Rezessiv allel belgini ifodalash uchun nechta nusxada bo‘lishi kerak?", answers: ["Bitta","Ikkita","Uchta","To‘rt"], correct: 1 },
+      {img: "img/test.jfif", question: " Allell genlarning o‘zaro ta’siri natijasida organizmda nima hosil bo‘ladi?", answers: ["Fenotip","Xromosoma","Mutatsiya","Sitoplazma"], correct: 0 },
+      {img: "img/test4.jfif", question: " Belgining geterozigot holatda ham ifodalanmasligi qanday holat?", answers: ["Dominantlik","Rezessivlik","Kodominantlik","Epistaz"], correct: 1 },
+      {img: "img/test5.jfif", question: " Allell genlar qayerda joylashgan bo‘ladi?", answers: ["Turli xromosomalarda","Bir xil xromosomaning bir xil lokusida","Sitoplazmada","DNKdan tashqarida"], correct: 1 },
+    ];
+
+    // --- Random 15 ta savol tanlash ---
+    function getRandomQuestions() {
+      const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 15);
+    }
+
+    let questions = getRandomQuestions();
+    let current = 0;
+    let correctAnswers = 0;
+
+    const container = document.getElementById("quiz-container");
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function showQuestion() {
+      const q = questions[current];
+      let answersShuffled = q.answers.map((a, i) => ({text: a, index: i}));
+      shuffle(answersShuffled);
+      q.shuffledAnswers = answersShuffled;
+      q.correctShuffledIndex = answersShuffled.findIndex(a => a.index === q.correct);
+
+      container.innerHTML = `
+        <section>
+          ${q.img ? `<img src="${q.img}" alt="rasm">` : ""}
+          <h1>${q.question}</h1>
+          <div class="answers">
+            ${answersShuffled.map((a, i) => `<button onclick="checkAnswer(${i}, this)">${a.text}</button>`).join("")}
+          </div>
+          <p>Savol ${current + 1}/${questions.length}</p>
+        </section>
+      `;
+    }
+
+    function checkAnswer(selected, btn) {
+      const q = questions[current];
+      const buttons = document.querySelectorAll(".answers button");
+
+      buttons.forEach((b, i) => {
+        b.disabled = true;
+        if (i === q.correctShuffledIndex) b.style.backgroundColor = "limegreen";
+        else if (i === selected) b.style.backgroundColor = "crimson";
+      });
+
+      if (selected === q.correctShuffledIndex) correctAnswers++;
+
+      setTimeout(() => {
+        current++;
+        if (current < questions.length) showQuestion();
+        else showResult();
+      }, 1000);
+    }
+
+    function showResult() {
+      const percent = Math.round((correctAnswers / questions.length) * 100);
+      let text = percent === 100 ? "🔥 Zo‘r! Barchasi to‘g‘ri!" : percent >= 60 ? "😊 Yaxshi natija!" : "😅 Yana harakat qiling!";
+
+      container.innerHTML = `
+        <section>
+          <h1>Test yakunlandi!</h1>
+          <p>Siz ${percent}% to‘g‘ri topdingiz.</p>
+          <p class="mt-4">${text}</p>
+          <button onclick="restartQuiz()" class="mt-6">Qayta boshlash</button>
+        </section>
+      `;
+    }
+
+    function restartQuiz() {
+      current = 0;
+      correctAnswers = 0;
+      questions = getRandomQuestions();
+      showQuestion();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
