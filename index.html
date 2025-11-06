@@ -35,19 +35,23 @@
             </button>
         </div>
 
-        <a href="create.html" class="text-white font-bold mt-4 cursor-pointer">O'yin yaratish</a>
+        <a href="create.html" class="text-white font-bold mt-4 cursor-pointer">Create a game</a>
     </div>
 
     <script>
         function checkPIN() {
-            const correctPIN = "Xayrullayeva0527"; // ✅ bu joyda sizning maxfiy kod
             const userPIN = document.getElementById("pinInput").value.trim();
 
-            if (userPIN === correctPIN) {
-                window.location.href = "questions.html"; // to‘g‘ri kod → test sahifasiga o‘tadi
-            } else if (userPIN === "") {
-                alert("Iltimos, PIN kiriting!");
-            } else {
+            if (userPIN === "") {
+                alert("⚠️ Iltimos, PIN kiriting!");
+            } 
+            else if (userPIN === "0317") {
+                window.location.href = "history.html"; // Kod 0317 bo‘lsa → history sahifasiga
+            } 
+            else if (userPIN === "Xayrullayeva0527") {
+                window.location.href = "questions.html"; // Kod Xayrullayeva0527 bo‘lsa → questions sahifasiga
+            } 
+            else {
                 alert("❌ Noto‘g‘ri PIN! Qayta urinib ko‘ring.");
             }
         }

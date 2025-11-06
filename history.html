@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O‘zbekiston Mustaqilligi Testi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #2563eb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      padding: 10px;
+    }
+    h1 { 
+      padding-bottom: 15px; 
+      color: white; 
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .questions section {
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: 100%;
+      max-width: 600px;
+      color: white;
+    }
+    .questions img {
+      width: 500px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .answers button {
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      background-color: white;
+      color: #2563eb;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      font-size: 13px;
+      width: 100%;
+    }
+    .answers button:hover {
+      background-color: rgba(255,255,255,0.877);
+    }
+  </style>
+</head>
+<body class="questions">
+  <div class="absolute top-4 right-4">
+    <select id="languageSelect" class="px-3 py-2 rounded-md text-sm font-bold">
+      <option value="uz">O‘zbek</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <script>
+    // --- 1. Savollar (UZ / EN) ---
+    const questionsUZ = [
+  { question: "O‘zbekiston mustaqillikka qachon erishgan?", answers: ["1990", "1991", "1992", "1993"], correct: 1 },
+  { question: "Mustaqillik kuni qachon nishonlanadi?", answers: ["31-avgust", "1-sentabr", "8-dekabr", "9-may"], correct: 1 },
+  { question: "O‘zbekiston birinchi Prezidenti kim bo‘lgan?", answers: ["Shavkat Mirziyoyev", "Islom Karimov", "Abdulla Aripov", "Abdulla Oripov"], correct: 1 },
+  { question: "Mustaqillik e’lon qilingan joy qaysi?", answers: ["Samarqand", "Toshkent", "Buxoro", "Farg‘ona"], correct: 1 },
+  { question: "Mustaqillik Deklaratsiyasi qachon qabul qilingan?", answers: ["1990-yil 20-iyun", "1991-yil 1-sentabr", "1992-yil 8-dekabr", "1989-yil 1-sentabr"], correct: 0 },
+  { question: "O‘zbekiston Respublikasi Konstitutsiyasi qachon qabul qilingan?", answers: ["1991", "1992", "1993", "1994"], correct: 1 },
+  { question: "O‘zbekiston BMTga qachon a’zo bo‘lgan?", answers: ["1991", "1992", "1993", "1995"], correct: 1 },
+  { question: "Mustaqillik so‘zi nimani anglatadi?", answers: ["Erkinlik", "Tinchlik", "Do‘stlik", "Baxt"], correct: 0 },
+  { question: "O‘zbekistonning poytaxti qayer?", answers: ["Samarqand", "Toshkent", "Buxoro", "Xiva"], correct: 1 },
+  { question: "O‘zbekiston bayrog‘i qachon qabul qilingan?", answers: ["1991-yil 18-noyabr", "1992-yil 8-dekabr", "1990-yil 1-iyun", "1993-yil 1-yanvar"], correct: 0 },
+  { question: "Bayroqdagi yarim oy nimani bildiradi?", answers: ["Kelajak", "Islom dinini", "Bahor", "Tinchlik"], correct: 1 },
+  { question: "Gerbdagi Humo qushi nimani bildiradi?", answers: ["Ozodlik", "Boylik", "Tinchlik", "Baxt"], correct: 0 },
+  { question: "O‘zbekiston madhiyasini kim yozgan?", answers: ["Abdulla Oripov", "Erkin Vohidov", "G‘afur G‘ulom", "Mirtemir"], correct: 0 },
+  { question: "Madhiyaning musiqasini kim bastalagan?", answers: ["Mutal Burhonov", "Yunus Rajabiy", "Komiljon Otaniyozov", "To‘lqin Alimov"], correct: 0 },
+  { question: "Mustaqillik ramzlaridan biri nima?", answers: ["Bayroq", "Til", "Kitob", "Tog‘"], correct: 0 },
+  { question: "O‘zbekiston Respublikasi tili qaysi?", answers: ["Rus tili", "O‘zbek tili", "Ingliz tili", "Tojik tili"], correct: 1 },
+  { question: "O‘zbekiston Respublikasi Prezidenti necha muddatga saylanadi?", answers: ["4 yil", "5 yil", "6 yil", "7 yil"], correct: 3 },
+  { question: "O‘zbekiston qaysi qit’ada joylashgan?", answers: ["Yevropa", "Osiyo", "Afrika", "Amerika"], correct: 1 },
+  { question: "Mustaqillik yillarida qaysi soha eng tez rivojlandi?", answers: ["Sanoat", "Sport", "Ta’lim", "Hammasi"], correct: 3 },
+  { question: "O‘zbekistonning milliy valyutasi nima?", answers: ["Tiyin", "So‘m", "Rubl", "Dollar"], correct: 1 },
+  { question: "Mustaqillik yillarida yangi Konstitutsiya qabul qilindimi?", answers: ["Ha", "Yo‘q", "Qisman", "Bilmayman"], correct: 0 },
+  { question: "O‘zbekiston mustaqil davlat sifatida nechanchi yil tan olingan?", answers: ["1991", "1992", "1993", "1994"], correct: 1 },
+  { question: "Islom Karimov qachon vafot etgan?", answers: ["2015", "2016", "2017", "2018"], correct: 1 },
+  { question: "Shavkat Mirziyoyev prezidentlik faoliyatini qachon boshlagan?", answers: ["2015", "2016", "2017", "2018"], correct: 2 },
+  { question: "Mustaqillik yillarida qaysi xalqaro tashkilotlarga a’zo bo‘lindi?", answers: ["BMT", "SHHT", "MDH", "Barchasi"], correct: 3 },
+  { question: "O‘zbekiston madhiyasining birinchi satri qanday boshlanadi?", answers: ["Serquyosh hur o‘lkam", "O‘zbekiston Vatanim manim", "Vatanim, jonim, yurtim", "Yashna, diyorim"], correct: 0 },
+  { question: "O‘zbekistonning 12 ta viloyatidan biri?", answers: ["Andijon", "Termiz", "Jizzax", "Sirdaryo"], correct: 0 },
+  { question: "O‘zbekiston milliy tili qachon davlat tili sifatida belgilangan?", answers: ["1989", "1990", "1991", "1992"], correct: 0 },
+  { question: "O‘zbekiston mustaqillik ramzi sifatida nima qabul qilingan?", answers: ["Gerb", "Bayroq", "Madhiy", "Barchasi"], correct: 3 },
+  { question: "O‘zbekistonning birinchi Konstitutsiyasi nechanchi moddadan iborat edi?", answers: ["110", "128", "157", "170"], correct: 2 },
+  { question: "Islom Karimov nechanchi yil prezident etib saylangan?", answers: ["1990", "1991", "1992", "1993"], correct: 0 },
+  { question: "O‘zbekiston Respublikasi Senati nima?", answers: ["Yuqori palata", "Quyi palata", "Mahalliy hokimiyat", "Sud"], correct: 0 },
+  { question: "Mustaqillik kuni har yili qanday tadbir bilan nishonlanadi?", answers: ["Bayram konserti", "Harbiy parad", "Gulxan", "Hammasi"], correct: 3 },
+  { question: "O‘zbekiston mustaqil davlat sifatida qanday shiorni ilgari surgan?", answers: ["Kelajagimiz buyuk", "Mustaqillik – baxt", "O‘zbekiston – kelajakka ishonch", "Erkinlik – yuksalish"], correct: 2 },
+  { question: "Mustaqillik sharafiga qaysi maydon nomlangan?", answers: ["Mustaqillik maydoni", "Do‘stlik maydoni", "Yangi hayot maydoni", "Bayram maydoni"], correct: 0 },
+  { question: "O‘zbekiston Respublikasining davlat madhiyasi nechanchi yilda qabul qilingan?", answers: ["1991", "1992", "1993", "1994"], correct: 1 },
+  { question: "O‘zbekiston Respublikasi gerbida nechta yulduz tasvirlangan?", answers: ["8", "12", "14", "16"], correct: 1 },
+  { question: "Gerbdagi paxta nimani bildiradi?", answers: ["Boylik", "Tinchlik", "Hosildorlik", "Mehnat"], correct: 2 },
+  { question: "O‘zbekiston mustaqilligi kim tomonidan e’lon qilingan?", answers: ["Prezident", "Oliy Kengash", "Xalq", "Hukumat"], correct: 1 },
+  { question: "O‘zbekiston mustaqilligi e’lon qilingan sana?", answers: ["31-avgust", "1-sentabr", "8-dekabr", "2-sentabr"], correct: 0 },
+  { question: "Mustaqillik e’lon qilingan hujjat nomi?", answers: ["Deklaratsiya", "Konstitutsiya", "Qaror", "Farmon"], correct: 0 },
+  { question: "O‘zbekiston mustaqilligining 30 yilligi qachon nishonlandi?", answers: ["2020", "2021", "2022", "2023"], correct: 1 },
+  { question: "O‘zbekiston Respublikasining pul birligi qachon muomalaga kiritilgan?", answers: ["1992", "1993", "1994", "1995"], correct: 2 },
+  { question: "O‘zbekiston milliy bayrog‘ida nechta rang bor?", answers: ["2", "3", "4", "5"], correct: 2 },
+  { question: "Bayroqdagi 12 yulduz nimani bildiradi?", answers: ["12 viloyat", "O‘tgan asrlar", "Baxt", "Mustaqillik"], correct: 0 },
+  { question: "O‘zbekiston Konstitutsiyasi nechanchi yil yangilangan?", answers: ["2022", "2023", "2024", "2025"], correct: 1 },
+  { question: "O‘zbekiston davlat madhiyasining matni nechta banddan iborat?", answers: ["2", "3", "4", "5"], correct: 0 },
+  { question: "O‘zbekiston mustaqilligi haqida film ishlanganmi?", answers: ["Ha", "Yo‘q", "Bilmayman", "Yo‘q, hali"], correct: 0 },
+  { question: "O‘zbekistonning mustaqilligi qanday yo‘l bilan qo‘lga kiritilgan?", answers: ["Tinch yo‘l bilan", "Urush bilan", "Revolyutsiya orqali", "Xalqaro bosim bilan"], correct: 0 },
+  { question: "Mustaqillik yillarida O‘zbekistonning xalqaro nufuzi qanday o‘zgardi?", answers: ["O‘sdi", "Pasaydi", "O‘zgarmadi", "Bilmayman"], correct: 0 }
+];
+
+
+const questionsEN = [
+  { question: "When did Uzbekistan gain independence?", answers: ["1990", "1991", "1992", "1993"], correct: 1 },
+  { question: "When is Independence Day celebrated?", answers: ["August 31", "September 1", "December 8", "May 9"], correct: 1 },
+  { question: "Who was the first President of Uzbekistan?", answers: ["Shavkat Mirziyoyev", "Islam Karimov", "Abdulla Aripov", "Abdulla Oripov"], correct: 1 },
+  { question: "In which city was independence declared?", answers: ["Samarkand", "Tashkent", "Bukhara", "Fergana"], correct: 1 },
+  { question: "When was the Declaration of Independence adopted?", answers: ["June 20, 1990", "September 1, 1991", "December 8, 1992", "September 1, 1989"], correct: 0 },
+  { question: "When was the Constitution of Uzbekistan adopted?", answers: ["1991", "1992", "1993", "1994"], correct: 1 },
+  { question: "When did Uzbekistan join the UN?", answers: ["1991", "1992", "1993", "1995"], correct: 1 },
+  { question: "What does the word 'independence' mean?", answers: ["Freedom", "Peace", "Friendship", "Happiness"], correct: 0 },
+  { question: "What is the capital of Uzbekistan?", answers: ["Samarkand", "Tashkent", "Bukhara", "Khiva"], correct: 1 },
+  { question: "When was the flag of Uzbekistan adopted?", answers: ["November 18, 1991", "December 8, 1992", "June 1, 1990", "January 1, 1993"], correct: 0 },
+  { question: "What does the crescent on the flag represent?", answers: ["Future", "Islam", "Spring", "Peace"], correct: 1 },
+  { question: "What does the Humo bird on the emblem symbolize?", answers: ["Freedom", "Wealth", "Peace", "Happiness"], correct: 0 },
+  { question: "Who wrote the national anthem of Uzbekistan?", answers: ["Abdulla Oripov", "Erkin Vohidov", "Gafur Gulom", "Mirtemir"], correct: 0 },
+  { question: "Who composed the music of the anthem?", answers: ["Mutal Burhonov", "Yunus Rajabiy", "Komiljon Otaniyozov", "Tolqin Alimov"], correct: 0 },
+  { question: "Which is one of the symbols of independence?", answers: ["Flag", "Language", "Book", "Mountain"], correct: 0 },
+  { question: "What is the official language of Uzbekistan?", answers: ["Russian", "Uzbek", "English", "Tajik"], correct: 1 },
+  { question: "For how long is the President elected?", answers: ["4 years", "5 years", "6 years", "7 years"], correct: 3 },
+  { question: "On which continent is Uzbekistan located?", answers: ["Europe", "Asia", "Africa", "America"], correct: 1 },
+  { question: "Which sector developed the fastest during independence?", answers: ["Industry", "Sports", "Education", "All of them"], correct: 3 },
+  { question: "What is the national currency of Uzbekistan?", answers: ["Tiyin", "Sum", "Ruble", "Dollar"], correct: 1 },
+  { question: "Was a new Constitution adopted after independence?", answers: ["Yes", "No", "Partly", "I don’t know"], correct: 0 },
+  { question: "When was Uzbekistan recognized as an independent state?", answers: ["1991", "1992", "1993", "1994"], correct: 1 },
+  { question: "When did Islam Karimov pass away?", answers: ["2015", "2016", "2017", "2018"], correct: 1 },
+  { question: "When did Shavkat Mirziyoyev start his presidency?", answers: ["2015", "2016", "2017", "2018"], correct: 2 },
+  { question: "Which international organizations did Uzbekistan join?", answers: ["UN", "SCO", "CIS", "All of them"], correct: 3 },
+  { question: "What is the first line of the national anthem?", answers: ["Serquyosh hur o‘lkam", "O‘zbekiston Vatanim manim", "Vatanim jonim yurtim", "Yashna diyorim"], correct: 0 },
+  { question: "Which is one of the 12 regions of Uzbekistan?", answers: ["Andijan", "Termiz", "Jizzakh", "Syrdarya"], correct: 0 },
+  { question: "When was Uzbek language declared state language?", answers: ["1989", "1990", "1991", "1992"], correct: 0 },
+  { question: "Which of the following are symbols of independence?", answers: ["Emblem", "Flag", "Anthem", "All of them"], correct: 3 },
+  { question: "How many articles were there in the first Constitution?", answers: ["110", "128", "157", "170"], correct: 2 },
+  { question: "When was Islam Karimov first elected president?", answers: ["1990", "1991", "1992", "1993"], correct: 0 },
+  { question: "What is the Senate of Uzbekistan?", answers: ["Upper house", "Lower house", "Local government", "Court"], correct: 0 },
+  { question: "How is Independence Day celebrated each year?", answers: ["Concerts", "Military parade", "Bonfire", "All of them"], correct: 3 },
+  { question: "What slogan represents independent Uzbekistan?", answers: ["Our future is great", "Freedom is happiness", "Uzbekistan — trust in the future", "Liberty is progress"], correct: 2 },
+  { question: "Which square is named after independence?", answers: ["Independence Square", "Friendship Square", "New Life Square", "Festival Square"], correct: 0 },
+  { question: "When was the national anthem adopted?", answers: ["1991", "1992", "1993", "1994"], correct: 1 },
+  { question: "How many stars are on Uzbekistan’s emblem?", answers: ["8", "12", "14", "16"], correct: 1 },
+  { question: "What does the cotton on the emblem represent?", answers: ["Wealth", "Peace", "Fertility", "Labor"], correct: 2 },
+  { question: "Who declared Uzbekistan’s independence?", answers: ["President", "Supreme Council", "People", "Government"], correct: 1 },
+  { question: "On which date was independence declared?", answers: ["August 31", "September 1", "December 8", "September 2"], correct: 0 },
+  { question: "What is the name of the independence document?", answers: ["Declaration", "Constitution", "Decree", "Order"], correct: 0 }
+  ]
+
+
+    // --- 2. Rasmlar ---
+    const images = [
+      "history.img/independence.jfif",
+      "history.img/independence2.jfif",
+      "history.img/independence3.jfif",
+      "history.img/independence4.jfif",
+      "history.img/independence5.jfif",
+      "history.img/IslomKarimov.jfif",
+      "history.img/ShavkatMirziyoyev.jfif"
+    ];
+
+    // --- 3. Tanlangan tilni olish ---
+    let currentLang = localStorage.getItem("lang") || "uz";
+    const langSelect = document.getElementById("languageSelect");
+    langSelect.value = currentLang;
+    langSelect.addEventListener("change", e => {
+      localStorage.setItem("lang", e.target.value);
+      location.reload();
+    });
+
+    function getQuestionsByLang(lang) {
+      if (lang === "en") return [...questionsEN];
+      return [...questionsUZ];
+    }
+    let allQuestions = getQuestionsByLang(currentLang);
+
+    // Rasmlarni qo‘shish
+    allQuestions.forEach((q, i) => q.img = images[i % images.length]);
+
+    // --- 4. Test logikasi ---
+    const questions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0,15);
+    let current = 0, correctAnswers = 0;
+    const wrongQuestions = [];
+    const container = document.getElementById("quiz-container");
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function showQuestion() {
+      const q = questions[current];
+      const answersShuffled = q.answers.map((a, i) => ({text: a, index: i}));
+      shuffle(answersShuffled);
+      q.shuffledAnswers = answersShuffled;
+      q.correctShuffledIndex = answersShuffled.findIndex(a => a.index === q.correct);
+
+      container.innerHTML = `
+        <section>
+          ${q.img ? `<img src="${q.img}" alt="rasm">` : ""}
+          <h1>${q.question}</h1>
+          <div class="answers">
+            ${answersShuffled.map((a,i)=>`<button onclick="checkAnswer(${i}, this)">${a.text}</button>`).join("")}
+          </div>
+          <p>Savol ${current + 1}/${questions.length}</p>
+        </section>
+      `;
+    }
+
+    function checkAnswer(selected, btn) {
+      const q = questions[current];
+      const buttons = document.querySelectorAll(".answers button");
+
+      buttons.forEach((b,i)=>{
+        b.disabled = true;
+        if(i===q.correctShuffledIndex) b.style.backgroundColor="limegreen";
+        else if(i===selected) b.style.backgroundColor="crimson";
+      });
+
+      if(selected === q.correctShuffledIndex) correctAnswers++;
+      else wrongQuestions.push({question: q.question, correct: q.answers[q.correct]});
+
+      setTimeout(()=>{
+        current++;
+        if(current < questions.length) showQuestion();
+        else showResult();
+      },1000);
+    }
+
+    function showResult() {
+      const percent = Math.round((correctAnswers / questions.length)*100);
+      const text = percent === 100 ? "🔥 Ajoyib! Barchasi to‘g‘ri!" : percent>=60 ? "😊 Yaxshi natija!" : "😅 Yana harakat qiling!";
+
+      const wrongHTML = wrongQuestions.length ? `
+        <h2 class="mt-4">❌ Noto‘g‘ri javoblar:</h2>
+        <ul class="text-left mt-2">
+          ${wrongQuestions.map(w=>`<li>${w.question} — ✅ ${w.correct}</li>`).join("")}
+        </ul>` : "";
+
+      container.innerHTML = `
+        <section>
+          <h1>Test yakunlandi!</h1>
+          <p>Siz ${percent}% to‘g‘ri topdingiz.</p>
+          <p class="mt-4">${text}</p>
+          ${wrongHTML}
+          <button onclick="restartQuiz()" class="mt-6 bg-white text-blue-700 px-4 py-2 rounded-md font-bold hover:bg-gray-200">Qayta boshlash</button>
+        </section>
+      `;
+    }
+
+    function restartQuiz() {
+      current = 0;
+      correctAnswers = 0;
+      wrongQuestions.length = 0;
+      showQuestion();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>

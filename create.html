@@ -1,11 +1,661 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>O'quv Platformasi — Bosh Menyu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background-color: #f8fafc; }
+    .fade { animation: fadein .22s ease; }
+    @keyframes fadein { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
+  </style>
 </head>
-<body>
-    
+<body class="min-h-screen flex items-start justify-center py-12 px-4">
+
+  <div class="w-full max-w-6xl bg-white rounded-2xl shadow-lg border border-blue-50 overflow-hidden">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 text-center">
+      <h1 class="text-3xl font-bold">O'quv Platformasi</h1>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6">
+      <!-- Sidebar / Menu -->
+      <aside class="col-span-1 p-4">
+        <nav class="space-y-3">
+          <button id="menu_university" class="menu-btn w-full text-left px-4 py-3 rounded-lg bg-blue-500 text-white font-medium hover:from-blue-600 hover:to-blue-700 transition">Universitet</button>
+          <button id="menu_school" class="menu-btn w-full text-left px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition">Maktab</button>
+          <button id="menu_language" class="menu-btn w-full text-left px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition">Til o‘rganish</button>
+          <button id="menu_riddles" class="menu-btn w-full text-left px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition">Topishmoqlar</button>
+        </nav>
+      </aside>
+
+      <!-- Content area -->
+      <section class="col-span-3 p-4">
+        <!-- Dynamic content container -->
+        <div id="contentArea" class="space-y-6 fade">
+
+          <!-- UNIVERSITY (default hidden) -->
+          <div id="section_university" class="hidden bg-white rounded-lg border border-blue-50 p-5 shadow-sm">
+            <h2 class="text-xl font-semibold text-blue-700 mb-3">Universitet — Ta'lim turi va yo'nalish</h2>
+
+            <!-- Ta'lim turi -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Ta'lim turi</label>
+                <select id="uni_talimTuri" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200">
+                  <option value="">Tanlang...</option>
+                  <option value="kunduzgi">Kunduzgi</option>
+                  <option value="kechgi">Kechgi</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Yo'nalish</label>
+                <select id="uni_major" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200" disabled>
+                  <option value="">Avval ta'lim turini tanlang</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Ichki yo'nalish / specialization -->
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Ichki yo'nalish (specialization)</label>
+                <select id="uni_specialization" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200" disabled>
+                  <option value="">Avval yo'nalishni tanlang</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Kurs</label>
+                <select id="uni_course" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200" disabled>
+                  <option value="">Tanlang...</option>
+                  <option value="1">1-kurs</option>
+                  <option value="2">2-kurs</option>
+                  <option value="3">3-kurs</option>
+                  <option value="4">4-kurs</option>
+                  <option value="5">5-kurs</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Semestr + Vaqt + Kod -->
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Semestr</label>
+                <select id="uni_semester" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200" disabled>
+                  <option value="">Tanlang...</option>
+                  <option value="1">1-semestr</option>
+                  <option value="2">2-semestr</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Vaqt (soniya)</label>
+                <select id="uni_time" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200" disabled>
+                  <option value="">Tanlang...</option>
+                  <option>10</option><option>15</option><option>20</option><option>25</option><option>30</option><option>45</option><option>60</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Kod</label>
+                <div class="flex gap-2">
+                  <input id="uni_code" class="flex-1 border rounded p-2" placeholder="Qo'lda kiritish yoki avtomatik yaratish" />
+                  <button id="uni_genCode" class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Yarat</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex gap-3">
+              <button id="uni_showResult" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Natijani ko'rsat</button>
+              <button id="uni_reset" class="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">Tozalash</button>
+            </div>
+
+            <!-- Result box -->
+            <div id="uni_result" class="mt-4 hidden bg-blue-50 border border-blue-100 rounded p-4 text-sm text-gray-800">
+              <p><strong>Ta'lim turi:</strong> <span id="uni_r_talim"></span></p>
+              <p><strong>Yo'nalish:</strong> <span id="uni_r_major"></span></p>
+              <p><strong>Ichki yo'nalish:</strong> <span id="uni_r_spec"></span></p>
+              <p><strong>Kurs / Semestr:</strong> <span id="uni_r_course"></span></p>
+              <p><strong>Vaqt:</strong> <span id="uni_r_time"></span> soniya</p>
+              <p class="mt-2 text-2xl font-mono text-blue-700" id="uni_r_code"></p>
+
+              <div class="mt-3 flex gap-2">
+                <button id="uni_copy" class="px-3 py-2 bg-blue-600 text-white rounded">Kodni nusxalash</button>
+                <button id="uni_finalReset" class="px-3 py-2 bg-gray-100 rounded">Yangi sozlash</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCHOOL -->
+          <div id="section_school" class="hidden bg-white rounded-lg border border-blue-50 p-5 shadow-sm">
+            <h2 class="text-xl font-semibold text-blue-700 mb-3">Maktab — Sinf va fan</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Sinf</label>
+                <select id="sch_class" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200">
+                  <option value="">Tanlang...</option>
+                  <!-- 1 dan 11 gacha -->
+                  <script>/* placeholder for options */</script>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Fan</label>
+                <select id="sch_subject" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200" disabled>
+                  <option value="">Avval sinfni tanlang</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Chorak</label>
+                <select id="sch_quarter" class="w-full border rounded p-2" disabled>
+                  <option value="">Tanlang...</option>
+                  <option value="1">1-chorak</option><option value="2">2-chorak</option><option value="3">3-chorak</option><option value="4">4-chorak</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Vaqt (soniya)</label>
+                <select id="sch_time" class="w-full border rounded p-2" disabled>
+                  <option value="">Tanlang...</option>
+                  <option>10</option><option>15</option><option>20</option><option>25</option><option>30</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Kod</label>
+                <div class="flex gap-2">
+                  <input id="sch_code" class="flex-1 border rounded p-2" placeholder="Kod kiritish yoki yaratish" />
+                  <button id="sch_genCode" class="px-3 py-2 bg-blue-600 text-white rounded">Yarat</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex gap-3">
+              <button id="sch_show" class="px-4 py-2 bg-blue-600 text-white rounded">Natijani ko'rsat</button>
+              <button id="sch_reset" class="px-4 py-2 bg-gray-100 rounded">Tozalash</button>
+            </div>
+
+            <div id="sch_result" class="mt-4 hidden bg-blue-50 border border-blue-100 rounded p-4 text-sm text-gray-800">
+              <p><strong>Sinf:</strong> <span id="sch_r_class"></span></p>
+              <p><strong>Fan:</strong> <span id="sch_r_subject"></span></p>
+              <p><strong>Chorak:</strong> <span id="sch_r_quarter"></span></p>
+              <p><strong>Vaqt:</strong> <span id="sch_r_time"></span> soniya</p>
+              <p class="mt-2 text-2xl font-mono text-blue-700" id="sch_r_code"></p>
+
+              <div class="mt-3 flex gap-2">
+                <button id="sch_copy" class="px-3 py-2 bg-blue-600 text-white rounded">Kodni nusxalash</button>
+                <button id="sch_finalReset" class="px-3 py-2 bg-gray-100 rounded">Yangi sozlash</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LANGUAGE -->
+          <div id="section_language" class="hidden bg-white rounded-lg border border-blue-50 p-5 shadow-sm">
+            <h2 class="text-xl font-semibold text-blue-700 mb-3">Til o‘rganish — Til va daraja</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Til</label>
+                <select id="lang_lang" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200">
+                  <option value="">Tanlang...</option>
+                  <option>Ingliz tili</option><option>Rus tili</option><option>O'zbek tili</option><option>Xitoy tili</option><option>Koreys tili</option><option>Nemis tili</option><option>Arab tili</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Daraja</label>
+                <select id="lang_level" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-200" disabled>
+                  <option value="">Avval tilni tanlang</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Vaqt (soniya)</label>
+                <select id="lang_time" class="w-full border rounded p-2" disabled>
+                  <option value="">Tanlang...</option>
+                  <option>10</option><option>15</option><option>20</option><option>30</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Kod</label>
+                <div class="flex gap-2">
+                  <input id="lang_code" class="flex-1 border rounded p-2" placeholder="Kod kiritish yoki yaratish" />
+                  <button id="lang_genCode" class="px-3 py-2 bg-blue-600 text-white rounded">Yarat</button>
+                </div>
+              </div>
+
+              <div class="flex items-end">
+                <button id="lang_show" class="w-full px-4 py-2 bg-blue-600 text-white rounded">Natijani ko'rsat</button>
+              </div>
+            </div>
+
+            <div id="lang_result" class="mt-4 hidden bg-blue-50 border border-blue-100 rounded p-4 text-sm text-gray-800">
+              <p><strong>Til:</strong> <span id="lang_r_lang"></span></p>
+              <p><strong>Daraja:</strong> <span id="lang_r_level"></span></p>
+              <p><strong>Vaqt:</strong> <span id="lang_r_time"></span> soniya</p>
+              <p class="mt-2 text-2xl font-mono text-blue-700" id="lang_r_code"></p>
+
+              <div class="mt-3 flex gap-2">
+                <button id="lang_copy" class="px-3 py-2 bg-blue-600 text-white rounded">Kodni nusxalash</button>
+                <button id="lang_finalReset" class="px-3 py-2 bg-gray-100 rounded">Yangi sozlash</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIDDLES (link/placeholder) -->
+          <div id="section_riddles" class="hidden bg-white rounded-lg border border-blue-50 p-5 shadow-sm">
+            <h2 class="text-xl font-semibold text-blue-700 mb-3">Topishmoqlar</h2>
+            <p class="text-gray-700">Savollar alohida HTML faylda saqlanadi. Agar siz shu yerga savollar kiritishni istasangiz, keyinchalik qo‘shish mumkin.</p>
+            <div class="mt-4 flex gap-3">
+              <a href="topishmoq.html" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Topishmoqlar sahifasiga o'tish</a>
+              <button id="riddles_generate" class="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">Kod yaratish (ushbu bo‘lim uchun)</button>
+            </div>
+
+            <div id="riddles_result" class="mt-4 hidden bg-blue-50 border border-blue-100 rounded p-4 text-sm text-gray-800">
+              <p><strong>Kod:</strong> <span id="riddles_r_code" class="font-mono text-blue-700"></span></p>
+              <div class="mt-3 flex gap-2">
+                <button id="riddles_copy" class="px-3 py-2 bg-blue-600 text-white rounded">Kodni nusxalash</button>
+                <button id="riddles_reset" class="px-3 py-2 bg-gray-100 rounded">Yangi yaratish</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    /* ==========================
+       DATA
+       ========================== */
+    const schoolSubjects = [
+      "Ona tili va adabiyot","Ingliz tili","Matematika (Algebra va Geometriya)","Fizika","Kimyo","Biologiya",
+      "Tarix","Geografiya","Informatika","Musiqa","San'at (Rassomlik)","Mexnat / Hunarmandchilik",
+      "Jismoniy tarbiya","Oila va jamiyat","Tadbirkorlik asoslari"
+    ];
+
+    const universityMajors = {
+      "Axborot texnologiyalari va Kompyuter fanlari": [
+        "Dasturiy injiniring","Axborot tizimlari","Ma'lumotlar bazalari","Sun'iy intellekt","Kompyuter tarmoqlari","Kiberxavfsizlik","Mobil va veb dasturlash","Kompyuter grafikasi","Ma'lumotlar tahlili (Data Science)"
+      ],
+      "Tibbiyot va sog'liqni saqlash": [
+        "Tibbiyot (general)","Stomatologiya","Farmatsiya","Pediatriya","Jarrohlik","Fizioterapiya","Laboratoriya diagnostikasi","Audiologiya","Enfeksion kasalliklar"
+      ],
+      "Muhandislik va Texnika": [
+        "Elektronika va telekommunikatsiya","Avtomobil injiniringi","Mexanika","Sanoat injiniringi","Energetika injiniringi","Kimyo injiniringi","Qurilish injiniringi","Materialshunoslik"
+      ],
+      "Iqtisodiyot va Biznes": [
+        "Moliya va hisob","Buxgalteriya","Marketing","Xalqaro iqtisod","Biznes boshqaruvi","Tadbirkorlik","Logistika va ta'minot zanjiri"
+      ],
+      "Huquqshunoslik": [
+        "Fuqarolik huquqi","Jinoyat huquqi","Xalqaro huquq","Mehnat huquqi","Intellektual mulk huquqi","Ma'muriy huquq"
+      ],
+      "Pedagogika va Ta'lim": [
+        "Boshlang'ich ta'lim (Maktabgacha)","Ona tili o'qituvchiligi","Matematika o'qituvchiligi","Fizika o'qituvchiligi","Informatika o'qituvchiligi","Tarix o'qituvchiligi","Maxsus pedagogika"
+      ],
+      "Filologiya va Gumanitar fanlar": [
+        "Ona tili va adabiyot","Ingliz filologiyasi","Rus filologiyasi","Nemis filologiyasi","Arab filologiyasi","Tarixshunoslik","Madaniyatshunoslik"
+      ],
+      "San'at va Dizayn": [
+        "Rassomlik (Fine Arts)","Grafik dizayn","San'at tarixi","Moda dizayni","Interyer dizayn","Kino va teatr","Multimedia dizayn"
+      ],
+      "Ijtimoiy fanlar va Psixologiya": [
+        "Psixologiya","Sotsiologiya","Xalqaro munosabatlar","Politologiya","Ijtimoiy ishlash (Social Work)"
+      ],
+      "Qishloq xo'jaligi va Biotexnologiya": [
+        "Agronomiya","Chorvachilik","Oziq-ovqat texnologiyasi","Fitopatologiya","Biotexnologiya","Landshaft dizayni"
+      ],
+      "Tabiiy fanlar va Matematika": [
+        "Matematika (amaliy va nazariy)","Statistika","Fizika (nazariy va amaliy)","Kimyo (nazariy)","Geologiya","Ekologiya"
+      ],
+      "Arxitektura va Shaharsozlik": [
+        "Arxitektura","Shaharsozlik (Urbanistika)","Qurilish inshootlari loyihalash","Interyer arxitekturasi"
+      ],
+      "Transport va Avtomobil": [
+        "Transport tizimlari","Avtomobil texnikasi","Logistika va transport menejmenti"
+      ],
+      "Energetika va Resurslar": [
+        "Elektr energiyasi","Qayta tiklanuvchi energiya","Yo'qotishsiz energiya tizimlari","Neft va gaz injiniringi"
+      ],
+      "Moda va Hospitality": [
+        "Turizm va mehmondo'stlik","Oziq-ovqat biznesi","Moda sanoati va dizayn"
+      ]
+    };
+
+    const languageLevels = ["Beginner","Elementary","Pre-Intermediate","Intermediate","Upper-Intermediate","Advanced","Pro"];
+
+    /* ==========================
+       DOM refs
+       ========================== */
+    const sections = {
+      university: document.getElementById('section_university'),
+      school: document.getElementById('section_school'),
+      language: document.getElementById('section_language'),
+      riddles: document.getElementById('section_riddles')
+    };
+
+
+
+
+
+    const menuButtons = document.querySelectorAll('.menu-btn');
+
+function setActiveButton(activeId){
+  menuButtons.forEach(btn => {
+    if(btn.id === activeId){
+      // faollashtirilgan: ko‘k rang va oq matn
+      btn.classList.remove('bg-blue-50','text-blue-700');
+      btn.classList.add('bg-blue-500','text-white');
+    } else {
+      // faollashtirilmagan: oq fon va ko‘k matn
+      btn.classList.remove('bg-blue-500','text-white');
+      btn.classList.add('bg-blue-50','text-blue-700');
+    }
+  });
+}
+
+// Menu tugmalariga event qo‘shish
+document.getElementById('menu_university').addEventListener('click', ()=>{ showSection('university'); setActiveButton('menu_university'); });
+document.getElementById('menu_school').addEventListener('click', ()=>{ showSection('school'); setActiveButton('menu_school'); });
+document.getElementById('menu_language').addEventListener('click', ()=>{ showSection('language'); setActiveButton('menu_language'); });
+document.getElementById('menu_riddles').addEventListener('click', ()=>{ showSection('riddles'); setActiveButton('menu_riddles'); });
+
+// init: universitet tugmasi faollashtirilgan bo‘lsin
+setActiveButton('menu_university');
+
+    // menu buttons
+    document.getElementById('menu_university').addEventListener('click', ()=>showSection('university'));
+    document.getElementById('menu_school').addEventListener('click', ()=>showSection('school'));
+    document.getElementById('menu_language').addEventListener('click', ()=>showSection('language'));
+    document.getElementById('menu_riddles').addEventListener('click', ()=>showSection('riddles'));
+    document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+
+    // UNIVERSITY elements
+    const uni_talimTuri = document.getElementById('uni_talimTuri');
+    const uni_major = document.getElementById('uni_major');
+    const uni_specialization = document.getElementById('uni_specialization');
+    const uni_course = document.getElementById('uni_course');
+    const uni_semester = document.getElementById('uni_semester');
+    const uni_time = document.getElementById('uni_time');
+    const uni_code = document.getElementById('uni_code');
+    const uni_genCode = document.getElementById('uni_genCode');
+    const uni_showResult = document.getElementById('uni_showResult');
+    const uni_reset = document.getElementById('uni_reset');
+    const uni_result_box = document.getElementById('uni_result');
+    const uni_r_talim = document.getElementById('uni_r_talim');
+    const uni_r_major = document.getElementById('uni_r_major');
+    const uni_r_spec = document.getElementById('uni_r_spec');
+    const uni_r_course = document.getElementById('uni_r_course');
+    const uni_r_time = document.getElementById('uni_r_time');
+    const uni_r_code = document.getElementById('uni_r_code');
+    const uni_copy = document.getElementById('uni_copy');
+    const uni_finalReset = document.getElementById('uni_finalReset');
+
+    // SCHOOL elements
+    const sch_class = document.getElementById('sch_class');
+    const sch_subject = document.getElementById('sch_subject');
+    const sch_quarter = document.getElementById('sch_quarter');
+    const sch_time = document.getElementById('sch_time');
+    const sch_code = document.getElementById('sch_code');
+    const sch_genCode = document.getElementById('sch_genCode');
+    const sch_show = document.getElementById('sch_show');
+    const sch_reset = document.getElementById('sch_reset');
+    const sch_result_box = document.getElementById('sch_result');
+    const sch_r_class = document.getElementById('sch_r_class');
+    const sch_r_subject = document.getElementById('sch_r_subject');
+    const sch_r_quarter = document.getElementById('sch_r_quarter');
+    const sch_r_time = document.getElementById('sch_r_time');
+    const sch_r_code = document.getElementById('sch_r_code');
+    const sch_copy = document.getElementById('sch_copy');
+    const sch_finalReset = document.getElementById('sch_finalReset');
+
+    // LANGUAGE elements
+    const lang_lang = document.getElementById('lang_lang');
+    const lang_level = document.getElementById('lang_level');
+    const lang_time = document.getElementById('lang_time');
+    const lang_code = document.getElementById('lang_code');
+    const lang_genCode = document.getElementById('lang_genCode');
+    const lang_show = document.getElementById('lang_show');
+    const lang_result_box = document.getElementById('lang_result');
+    const lang_r_lang = document.getElementById('lang_r_lang');
+    const lang_r_level = document.getElementById('lang_r_level');
+    const lang_r_time = document.getElementById('lang_r_time');
+    const lang_r_code = document.getElementById('lang_r_code');
+    const lang_copy = document.getElementById('lang_copy');
+    const lang_finalReset = document.getElementById('lang_finalReset');
+
+    // RIDDLES
+    const riddles_generate = document.getElementById('riddles_generate');
+    const riddles_result = document.getElementById('riddles_result');
+    const riddles_r_code = document.getElementById('riddles_r_code');
+    const riddles_copy = document.getElementById('riddles_copy');
+    const riddles_reset = document.getElementById('riddles_reset');
+
+    /* ==========================
+       INITIALIZE: populate static selects
+       ========================== */
+    // School class options 1-11
+    (function fillClasses(){
+      let html = '<option value="">Tanlang...</option>';
+      for(let i=1;i<=11;i++) html += `<option value="${i}">${i}-sinf</option>`;
+      sch_class.innerHTML = html;
+    })();
+
+    // School subject filling when class chosen
+    sch_class.addEventListener('change', ()=>{
+      const v = sch_class.value;
+      if(!v){ sch_subject.innerHTML = '<option>Avval sinfni tanlang</option>'; sch_subject.disabled=true; sch_quarter.disabled=true; sch_time.disabled=true; return; }
+      sch_subject.disabled=false; sch_quarter.disabled=false; sch_time.disabled=false;
+      let opts = '<option value="">Tanlang...</option>';
+      schoolSubjects.forEach(s => opts += `<option value="${s}">${s}</option>`);
+      sch_subject.innerHTML = opts;
+    });
+
+    // Language level populate when language chosen
+    lang_lang.addEventListener('change', ()=>{
+      if(!lang_lang.value){ lang_level.innerHTML = '<option>Avval tilni tanlang</option>'; lang_level.disabled=true; lang_time.disabled=true; return; }
+      lang_level.disabled=false; lang_time.disabled=false;
+      lang_level.innerHTML = '<option value="">Tanlang...</option>' + languageLevels.map(l=>`<option>${l}</option>`).join('');
+    });
+
+    /* ==========================
+       University logic
+       ========================== */
+    uni_talimTuri.addEventListener('change', ()=>{
+      const v = uni_talimTuri.value;
+      uni_major.disabled = true;
+      uni_specialization.disabled = true;
+      uni_course.disabled = true;
+      uni_semester.disabled = true;
+      uni_time.disabled = true;
+      uni_code.value = '';
+      uni_result_box.classList.add('hidden');
+
+      if(!v){ uni_major.innerHTML = '<option>Avval ta\'lim turini tanlang</option>'; return; }
+
+      // Build majors list from universityMajors keys
+      uni_major.disabled = false;
+      let opts = '<option value="">Tanlang...</option>';
+      Object.keys(universityMajors).forEach(k => opts += `<option value="${k}">${k}</option>`);
+      uni_major.innerHTML = opts;
+    });
+
+    uni_major.addEventListener('change', ()=>{
+      const v = uni_major.value;
+      uni_specialization.disabled = true;
+      uni_course.disabled = true;
+      uni_semester.disabled = true;
+      uni_time.disabled = true;
+      uni_code.value = '';
+      uni_result_box.classList.add('hidden');
+
+      if(!v){ uni_specialization.innerHTML = '<option>Avval yo\'nalishni tanlang</option>'; return; }
+
+      const subs = universityMajors[v] || [];
+      uni_specialization.disabled = false;
+      uni_specialization.innerHTML = '<option value="">Tanlang...</option>' + subs.map(s=>`<option value="${s}">${s}</option>`).join('');
+      uni_course.disabled = false;
+    });
+
+    uni_specialization.addEventListener('change', ()=>{
+      const v = uni_specialization.value;
+      uni_course.disabled = !v;
+      uni_semester.disabled = !v;
+      uni_time.disabled = !v;
+      uni_code.value = '';
+      uni_result_box.classList.add('hidden');
+    });
+
+    uni_genCode.addEventListener('click', ()=>{
+      uni_code.value = generateCode(6);
+      showUniResult();
+    });
+
+    uni_showResult.addEventListener('click', showUniResult);
+
+    function showUniResult(){
+      const talim = uni_talimTuri.value || '—';
+      const major = uni_major.value || '—';
+      const spec = uni_specialization.value || '—';
+      const course = uni_course.value || '—';
+      const sem = uni_semester.value || '—';
+      const time = uni_time.value || '—';
+      let code = uni_code.value.trim();
+      if(!code) code = generateCode(6), uni_code.value = code;
+
+      uni_r_talim.textContent = talim;
+      uni_r_major.textContent = major;
+      uni_r_spec.textContent = spec;
+      uni_r_course.textContent = `${course} / ${sem}`;
+      uni_r_time.textContent = time;
+      uni_r_code.textContent = code;
+      uni_result_box.classList.remove('hidden');
+    }
+
+    uni_reset.addEventListener('click', ()=>{
+      uni_talimTuri.value=''; uni_major.innerHTML = '<option>Avval ta\'lim turini tanlang</option>'; uni_major.disabled=true;
+      uni_specialization.innerHTML = '<option>Avval yo\'nalishni tanlang</option>'; uni_specialization.disabled=true;
+      uni_course.value=''; uni_course.disabled=true; uni_semester.value=''; uni_semester.disabled=true; uni_time.value=''; uni_time.disabled=true;
+      uni_code.value=''; uni_result_box.classList.add('hidden');
+    });
+
+    uni_copy.addEventListener('click', ()=>{ copyText(uni_r_code.textContent); });
+    uni_finalReset.addEventListener('click', ()=>{ uni_reset.click(); });
+
+    /* ==========================
+       School logic
+       ========================== */
+    sch_genCode.addEventListener('click', ()=>{ sch_code.value = generateCode(6); showSchResult(); });
+
+    sch_show.addEventListener('click', showSchResult);
+
+    function showSchResult(){
+      const cls = sch_class.value || '—';
+      const subj = sch_subject.value || '—';
+      const quarter = sch_quarter.value || '—';
+      const time = sch_time.value || '—';
+      let code = sch_code.value.trim();
+      if(!code) { code = generateCode(6); sch_code.value = code; }
+
+      sch_r_class.textContent = cls + (cls !== '—' ? '-sinf' : '');
+      sch_r_subject.textContent = subj;
+      sch_r_quarter.textContent = quarter;
+      sch_r_time.textContent = time;
+      sch_r_code.textContent = code;
+      sch_result_box.classList.remove('hidden');
+    }
+
+    sch_reset.addEventListener('click', ()=>{
+      sch_class.value=''; sch_subject.innerHTML='<option>Avval sinfni tanlang</option>'; sch_subject.disabled=true;
+      sch_quarter.value=''; sch_quarter.disabled=true; sch_time.value=''; sch_time.disabled=true; sch_code.value=''; sch_result_box.classList.add('hidden');
+    });
+
+    sch_copy.addEventListener('click', ()=>{ copyText(sch_r_code.textContent); });
+    sch_finalReset.addEventListener('click', ()=>{ sch_reset.click(); });
+
+    /* ==========================
+       Language logic
+       ========================== */
+    lang_genCode.addEventListener('click', ()=>{ lang_code.value = generateCode(6); showLangResult(); });
+    lang_show.addEventListener('click', showLangResult);
+
+    function showLangResult(){
+      const l = lang_lang.value || '—';
+      const level = lang_level.value || '—';
+      const time = lang_time.value || '—';
+      let code = lang_code.value.trim();
+      if(!code){ code = generateCode(6); lang_code.value = code; }
+
+      lang_r_lang.textContent = l;
+      lang_r_level.textContent = level;
+      lang_r_time.textContent = time;
+      lang_r_code.textContent = code;
+      lang_result_box.classList.remove('hidden');
+    }
+
+    lang_copy.addEventListener('click', ()=>{ copyText(lang_r_code.textContent); });
+    lang_finalReset.addEventListener('click', ()=>{
+      lang_lang.value=''; lang_level.innerHTML = '<option>Avval tilni tanlang</option>'; lang_level.disabled=true;
+      lang_time.value=''; lang_time.disabled=true; lang_code.value=''; lang_result_box.classList.add('hidden');
+    });
+
+    /* ==========================
+       Riddles logic (simple code creation)
+       ========================== */
+    riddles_generate.addEventListener('click', ()=>{
+      riddles_r_code.textContent = generateCode(6);
+      riddles_result.classList.remove('hidden');
+    });
+
+    riddles_copy.addEventListener('click', ()=>{ copyText(riddles_r_code.textContent); });
+    riddles_reset.addEventListener('click', ()=>{ riddles_result.classList.add('hidden'); riddles_r_code.textContent=''; });
+
+    /* ==========================
+       Helpers
+       ========================== */
+    function showSection(name){
+      // hide all
+      Object.keys(sections).forEach(k => sections[k].classList.add('hidden'));
+      // show requested
+      sections[name].classList.remove('hidden');
+      // scroll to top of content area for UX
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetAll(){
+      // hide all sections
+      Object.keys(sections).forEach(k => sections[k].classList.add('hidden'));
+      // reset all forms
+      uni_reset.click(); sch_reset.click(); lang_finalReset.click(); riddles_reset.click();
+      document.getElementById('userName').value = '';
+    }
+
+    function generateCode(len=6){
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let out = '';
+      for(let i=0;i<len;i++) out += chars.charAt(Math.floor(Math.random()*chars.length));
+      return out;
+    }
+
+    function copyText(text){
+      if(!text){ alert('Nusxalanadigan kod yo‘q'); return; }
+      navigator.clipboard.writeText(text).then(()=>{ alert('Kod nusxalandi: ' + text); }).catch(()=>{ alert('Clipboard ga yozib bo\'lmadi'); });
+    }
+
+    // init: show university by default
+    showSection('university');
+
+  </script>
 </body>
 </html>
