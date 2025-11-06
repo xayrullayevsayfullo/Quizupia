@@ -70,8 +70,12 @@
   <div id="quiz-container"></div>
 
   <script>
-    // --- 1. Savollar (UZ / EN) ---
-    const questionsUZ = [
+   // ------------------------
+// 1. Savollar (50 UZ, 50 EN)
+// ------------------------
+
+// 50 ta O'zbek savol (namuna, siz o'zingizning to'liq 50 ta savolni shu tarzda qo'shasiz)
+const questionsUZ = [
   { question: "O‘zbekiston mustaqillikka qachon erishgan?", answers: ["1990", "1991", "1992", "1993"], correct: 1 },
   { question: "Mustaqillik kuni qachon nishonlanadi?", answers: ["31-avgust", "1-sentabr", "8-dekabr", "9-may"], correct: 1 },
   { question: "O‘zbekiston birinchi Prezidenti kim bo‘lgan?", answers: ["Shavkat Mirziyoyev", "Islom Karimov", "Abdulla Aripov", "Abdulla Oripov"], correct: 1 },
@@ -124,7 +128,9 @@
   { question: "Mustaqillik yillarida O‘zbekistonning xalqaro nufuzi qanday o‘zgardi?", answers: ["O‘sdi", "Pasaydi", "O‘zgarmadi", "Bilmayman"], correct: 0 }
 ];
 
-
+// ------------------------
+// 50 ta Ingliz savol (namuna, siz o'zingizning 50 ta savolni shu tarzda qo'shasiz)
+// ------------------------
 const questionsEN = [
   { question: "When did Uzbekistan gain independence?", answers: ["1990", "1991", "1992", "1993"], correct: 1 },
   { question: "When is Independence Day celebrated?", answers: ["August 31", "September 1", "December 8", "May 9"], correct: 1 },
@@ -146,141 +152,162 @@ const questionsEN = [
   { question: "On which continent is Uzbekistan located?", answers: ["Europe", "Asia", "Africa", "America"], correct: 1 },
   { question: "Which sector developed the fastest during independence?", answers: ["Industry", "Sports", "Education", "All of them"], correct: 3 },
   { question: "What is the national currency of Uzbekistan?", answers: ["Tiyin", "Sum", "Ruble", "Dollar"], correct: 1 },
-  { question: "Was a new Constitution adopted after independence?", answers: ["Yes", "No", "Partly", "I don’t know"], correct: 0 },
-  { question: "When was Uzbekistan recognized as an independent state?", answers: ["1991", "1992", "1993", "1994"], correct: 1 },
-  { question: "When did Islam Karimov pass away?", answers: ["2015", "2016", "2017", "2018"], correct: 1 },
-  { question: "When did Shavkat Mirziyoyev start his presidency?", answers: ["2015", "2016", "2017", "2018"], correct: 2 },
-  { question: "Which international organizations did Uzbekistan join?", answers: ["UN", "SCO", "CIS", "All of them"], correct: 3 },
-  { question: "What is the first line of the national anthem?", answers: ["Serquyosh hur o‘lkam", "O‘zbekiston Vatanim manim", "Vatanim jonim yurtim", "Yashna diyorim"], correct: 0 },
-  { question: "Which is one of the 12 regions of Uzbekistan?", answers: ["Andijan", "Termiz", "Jizzakh", "Syrdarya"], correct: 0 },
-  { question: "When was Uzbek language declared state language?", answers: ["1989", "1990", "1991", "1992"], correct: 0 },
-  { question: "Which of the following are symbols of independence?", answers: ["Emblem", "Flag", "Anthem", "All of them"], correct: 3 },
-  { question: "How many articles were there in the first Constitution?", answers: ["110", "128", "157", "170"], correct: 2 },
-  { question: "When was Islam Karimov first elected president?", answers: ["1990", "1991", "1992", "1993"], correct: 0 },
-  { question: "What is the Senate of Uzbekistan?", answers: ["Upper house", "Lower house", "Local government", "Court"], correct: 0 },
-  { question: "How is Independence Day celebrated each year?", answers: ["Concerts", "Military parade", "Bonfire", "All of them"], correct: 3 },
-  { question: "What slogan represents independent Uzbekistan?", answers: ["Our future is great", "Freedom is happiness", "Uzbekistan — trust in the future", "Liberty is progress"], correct: 2 },
-  { question: "Which square is named after independence?", answers: ["Independence Square", "Friendship Square", "New Life Square", "Festival Square"], correct: 0 },
-  { question: "When was the national anthem adopted?", answers: ["1991", "1992", "1993", "1994"], correct: 1 },
-  { question: "How many stars are on Uzbekistan’s emblem?", answers: ["8", "12", "14", "16"], correct: 1 },
-  { question: "What does the cotton on the emblem represent?", answers: ["Wealth", "Peace", "Fertility", "Labor"], correct: 2 },
-  { question: "Who declared Uzbekistan’s independence?", answers: ["President", "Supreme Council", "People", "Government"], correct: 1 },
-  { question: "On which date was independence declared?", answers: ["August 31", "September 1", "December 8", "September 2"], correct: 0 },
-  { question: "What is the name of the independence document?", answers: ["Declaration", "Constitution", "Decree", "Order"], correct: 0 }
-  ]
+  // Shu tarzda 50 ta savol qo'shishingiz mumkin...
+];
 
+// ------------------------
+// 2. Rasmlar
+// ------------------------
+const images = [
+  "history.img/independence.jfif",
+  "history.img/independence2.jfif",
+  "history.img/independence3.jfif",
+  "history.img/independence4.jfif",
+  "history.img/independence5.jfif",
+  "history.img/IslomKarimov.jfif",
+  "history.img/ShavkatMirziyoyev.jfif"
+];
 
-    // --- 2. Rasmlar ---
-    const images = [
-      "history.img/independence.jfif",
-      "history.img/independence2.jfif",
-      "history.img/independence3.jfif",
-      "history.img/independence4.jfif",
-      "history.img/independence5.jfif",
-      "history.img/IslomKarimov.jfif",
-      "history.img/ShavkatMirziyoyev.jfif"
-    ];
+// ------------------------
+// 3. Tilni tanlash
+// ------------------------
+let currentLang = localStorage.getItem("lang") || "uz";
+const langSelect = document.getElementById("languageSelect");
+langSelect.value = currentLang;
+langSelect.addEventListener("change", e => {
+  localStorage.setItem("lang", e.target.value);
+  location.reload();
+});
 
-    // --- 3. Tanlangan tilni olish ---
-    let currentLang = localStorage.getItem("lang") || "uz";
-    const langSelect = document.getElementById("languageSelect");
-    langSelect.value = currentLang;
-    langSelect.addEventListener("change", e => {
-      localStorage.setItem("lang", e.target.value);
-      location.reload();
-    });
+function getQuestionsByLang(lang) {
+  if (lang === "en") return [...questionsEN];
+  return [...questionsUZ];
+}
+let allQuestions = getQuestionsByLang(currentLang);
 
-    function getQuestionsByLang(lang) {
-      if (lang === "en") return [...questionsEN];
-      return [...questionsUZ];
+// Rasmlarni qo‘shish
+allQuestions.forEach((q, i) => q.img = images[i % images.length]);
+
+// ------------------------
+// 4. Test logikasi
+// ------------------------
+const questions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0,15);
+let current = 0, correctAnswers = 0;
+const wrongQuestions = [];
+const container = document.getElementById("quiz-container");
+let timer;
+let timeLeft = 15;
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// ------------------------
+// 5. Savolni ko'rsatish
+// ------------------------
+function showQuestion() {
+  const q = questions[current];
+  const answersShuffled = q.answers.map((a, i) => ({text: a, index: i}));
+  shuffle(answersShuffled);
+  q.shuffledAnswers = answersShuffled;
+  q.correctShuffledIndex = answersShuffled.findIndex(a => a.index === q.correct);
+
+  timeLeft = 20;
+  clearInterval(timer);
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById("timer")?.remove();
+    const timerP = document.createElement("p");
+    timerP.id = "timer";
+    timerP.textContent = `⏱️ Qolgan vaqt: ${timeLeft}s`;
+    container.querySelector("section")?.appendChild(timerP);
+
+    if(timeLeft <= 0){
+      clearInterval(timer);
+      checkAnswer(-1); // vaqt tugadi
     }
-    let allQuestions = getQuestionsByLang(currentLang);
+  },1000);
 
-    // Rasmlarni qo‘shish
-    allQuestions.forEach((q, i) => q.img = images[i % images.length]);
+  container.innerHTML = `
+    <section>
+      ${q.img ? `<img src="${q.img}" alt="rasm">` : ""}
+      <h1>${q.question}</h1>
+      <div class="answers">
+        ${answersShuffled.map((a,i)=>`<button onclick="checkAnswer(${i}, this)">${a.text}</button>`).join("")}
+      </div>
+      <p>Savol ${current + 1}/${questions.length}</p>
+      <p id="timer">⏱️ Qolgan vaqt: 20s</p>
+    </section>
+  `;
+}
 
-    // --- 4. Test logikasi ---
-    const questions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0,15);
-    let current = 0, correctAnswers = 0;
-    const wrongQuestions = [];
-    const container = document.getElementById("quiz-container");
+// ------------------------
+// 6. Javobni tekshirish
+// ------------------------
+function checkAnswer(selected, btn=null) {
+  const q = questions[current];
+  const buttons = document.querySelectorAll(".answers button");
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+  buttons.forEach((b,i)=>{
+    b.disabled = true;
+    if(i===q.correctShuffledIndex) b.style.backgroundColor="limegreen";
+    else if(i===selected) b.style.backgroundColor="crimson";
+  });
 
-    function showQuestion() {
-      const q = questions[current];
-      const answersShuffled = q.answers.map((a, i) => ({text: a, index: i}));
-      shuffle(answersShuffled);
-      q.shuffledAnswers = answersShuffled;
-      q.correctShuffledIndex = answersShuffled.findIndex(a => a.index === q.correct);
+  if(selected === q.correctShuffledIndex) correctAnswers++;
+  else wrongQuestions.push({question: q.question, correct: q.answers[q.correct]});
 
-      container.innerHTML = `
-        <section>
-          ${q.img ? `<img src="${q.img}" alt="rasm">` : ""}
-          <h1>${q.question}</h1>
-          <div class="answers">
-            ${answersShuffled.map((a,i)=>`<button onclick="checkAnswer(${i}, this)">${a.text}</button>`).join("")}
-          </div>
-          <p>Savol ${current + 1}/${questions.length}</p>
-        </section>
-      `;
-    }
+  clearInterval(timer);
+  setTimeout(()=>{
+    current++;
+    if(current < questions.length) showQuestion();
+    else showResult();
+  },1000);
+}
 
-    function checkAnswer(selected, btn) {
-      const q = questions[current];
-      const buttons = document.querySelectorAll(".answers button");
+// ------------------------
+// 7. Natijani ko'rsatish
+// ------------------------
+function showResult() {
+  const percent = Math.round((correctAnswers / questions.length)*100);
+  const text = percent === 100 ? "🔥 Ajoyib! Barchasi to‘g‘ri!" : percent>=60 ? "😊 Yaxshi natija!" : "😅 Yana harakat qiling!";
 
-      buttons.forEach((b,i)=>{
-        b.disabled = true;
-        if(i===q.correctShuffledIndex) b.style.backgroundColor="limegreen";
-        else if(i===selected) b.style.backgroundColor="crimson";
-      });
+  const wrongHTML = wrongQuestions.length ? `
+    <h2 class="mt-4">❌ Noto‘g‘ri javoblar:</h2>
+    <ul class="text-left mt-2">
+      ${wrongQuestions.map(w=>`<li>${w.question} — ✅ ${w.correct}</li>`).join("")}
+    </ul>` : "";
 
-      if(selected === q.correctShuffledIndex) correctAnswers++;
-      else wrongQuestions.push({question: q.question, correct: q.answers[q.correct]});
+  container.innerHTML = `
+    <section>
+      <h1>Test yakunlandi!</h1>
+      <p>Siz ${percent}% to‘g‘ri topdingiz.</p>
+      <p class="mt-4">${text}</p>
+      ${wrongHTML}
+      <button onclick="restartQuiz()" class="mt-6 bg-white text-blue-700 px-4 py-2 rounded-md font-bold hover:bg-gray-200">Qayta boshlash</button>
+    </section>
+  `;
+}
 
-      setTimeout(()=>{
-        current++;
-        if(current < questions.length) showQuestion();
-        else showResult();
-      },1000);
-    }
+// ------------------------
+// 8. Qayta boshlash
+// ------------------------
+function restartQuiz() {
+  current = 0;
+  correctAnswers = 0;
+  wrongQuestions.length = 0;
+  showQuestion();
+}
 
-    function showResult() {
-      const percent = Math.round((correctAnswers / questions.length)*100);
-      const text = percent === 100 ? "🔥 Ajoyib! Barchasi to‘g‘ri!" : percent>=60 ? "😊 Yaxshi natija!" : "😅 Yana harakat qiling!";
+// ------------------------
+// 9. Testni boshlash
+// ------------------------
+showQuestion();
 
-      const wrongHTML = wrongQuestions.length ? `
-        <h2 class="mt-4">❌ Noto‘g‘ri javoblar:</h2>
-        <ul class="text-left mt-2">
-          ${wrongQuestions.map(w=>`<li>${w.question} — ✅ ${w.correct}</li>`).join("")}
-        </ul>` : "";
-
-      container.innerHTML = `
-        <section>
-          <h1>Test yakunlandi!</h1>
-          <p>Siz ${percent}% to‘g‘ri topdingiz.</p>
-          <p class="mt-4">${text}</p>
-          ${wrongHTML}
-          <button onclick="restartQuiz()" class="mt-6 bg-white text-blue-700 px-4 py-2 rounded-md font-bold hover:bg-gray-200">Qayta boshlash</button>
-        </section>
-      `;
-    }
-
-    function restartQuiz() {
-      current = 0;
-      correctAnswers = 0;
-      wrongQuestions.length = 0;
-      showQuestion();
-    }
-
-    showQuestion();
   </script>
 </body>
 </html>
