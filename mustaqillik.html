@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O‘zbekiston Mustaqilligi Testi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #2563eb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      padding: 10px;
+    }
+    h1 { 
+      padding-bottom: 15px; 
+      color: white; 
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .questions section {
+      padding: 20px;
+      margin-top: 40px;
+      border-radius: 12px;
+      text-align: center;
+      width: 100%;
+      max-width: 600px;
+      color: white;
+    }
+    .questions img {
+      width: 500px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .answers button {
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      background-color: white;
+      color: #2563eb;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      font-size: 13px;
+      width: 100%;
+    }
+    .answers button:hover {
+      background-color: rgba(255,255,255,0.877);
+    }
+  </style>
+</head>
+<body class="questions">
+  <div class="absolute top-4 right-4">
+    <select id="languageSelect" class="px-3 py-2 rounded-md text-sm font-bold">
+      <option value="uz">O‘zbek</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <script>
+   // ------------------------
+// 1. Savollar (50 UZ, 50 EN)
+// ------------------------
+
+// 50 ta O'zbek savol (namuna, siz o'zingizning to'liq 50 ta savolni shu tarzda qo'shasiz)
+const questionsUZ = [
+  { question: "Mustaqillikning ilk yillarida ta’lim tizimida eng muhim vazifa nima edi?", answers: ["Yangi dasturlar tuzish", "Ta’limni isloh qilish", "O‘qituvchilarni qisqartirish", "Xususiy maktablarni yopish"], correct: 1 },
+  { question: "Ta’lim sohasidagi islohotlar qaysi hujjat asosida boshlandi?", answers: ["Konstitutsiya", "Ta’lim to‘g‘risidagi qonun", "Milliy dastur", "Farmon"], correct: 2 },
+  { question: "“Kadrlar tayyorlash milliy dasturi” qachon qabul qilingan?", answers: ["1995", "1997", "1998", "2000"], correct: 1 },
+  { question: "“Ta’lim to‘g‘risida”gi qonun qachon qabul qilingan?", answers: ["1992", "1994", "1997", "1999"], correct: 2 },
+  { question: "Kadrlar tayyorlash milliy dasturining maqsadi nima?", answers: ["Yangi darsliklar yaratish", "Yoshlarni zamonaviy bilimlar bilan qurollantirish", "Maktablarni ta’mirlash", "O‘qituvchilarni attestatsiyadan o‘tkazish"], correct: 1 },
+  { question: "Mustaqillikdan keyingi yillarda nechanchi bosqichli ta’lim tizimi joriy etilgan?", answers: ["2 bosqichli", "3 bosqichli", "4 bosqichli", "5 bosqichli"], correct: 1 },
+  { question: "Ta’lim tizimining birinchi bosqichi qaysi?", answers: ["Oliy ta’lim", "Umumiy o‘rta ta’lim", "Kollej", "Litsey"], correct: 1 },
+  { question: "Akademik litsey va kasb-hunar kollejlari qachon tashkil etilgan?", answers: ["1995–1997 yillar", "1998–2001 yillar", "2002–2005 yillar", "1993–1994 yillar"], correct: 1 },
+  { question: "Ta’lim tizimidagi islohotlar kim rahbarligida amalga oshirilgan?", answers: ["Islom Karimov", "Shavkat Mirziyoyev", "Abdulla Oripov", "Oliy Majlis"], correct: 0 },
+  { question: "O‘zbekiston Respublikasi Konstitutsiyasida ta’limga oid qaysi modda mavjud?", answers: ["41-modda", "20-modda", "10-modda", "15-modda"], correct: 0 },
+  { question: "41-modda nimani kafolatlaydi?", answers: ["Har bir fuqaroning ta’lim olish huquqini", "Faqat maktabgacha ta’limni", "Xususiy ta’limni", "Faqat oliy ta’limni"], correct: 0 },
+  { question: "Mustaqillikdan so‘ng ta’lim tizimi qanday yo‘nalishga o‘tgan?", answers: ["Davlat markazlashtirilgan tizim", "Bozor iqtisodiyoti talablariga mos tizim", "Sovet tizimi", "Harbiy tizim"], correct: 1 },
+  { question: "Ta’lim sohasida xalqaro hamkorlik qachon kengaydi?", answers: ["1990-yillar o‘rtalarida", "2000-yillar boshida", "1980-yillarda", "2010-yillarda"], correct: 0 },
+  { question: "Kadrlar tayyorlash milliy dasturi nechta bosqichdan iborat?", answers: ["2", "3", "4", "5"], correct: 1 },
+  { question: "Ta’lim tizimida 9 yillik majburiy ta’lim o‘rniga nima joriy etilgan?", answers: ["11 yillik majburiy ta’lim", "12 yillik tizim", "9+3 tizimi", "Bozor tizimi"], correct: 2 },
+  { question: "Kasb-hunar kollejlari ochilishidan maqsad nima edi?", answers: ["Ishsizlarni kamaytirish", "Yoshlarni kasbga o‘rgatish", "Sportni rivojlantirish", "Madaniyatni oshirish"], correct: 1 },
+  { question: "Akademik litseylarning asosiy vazifasi nima edi?", answers: ["Oliy ta’limga tayyorlash", "Kasb berish", "Ish bilan ta’minlash", "Tadbirlar o‘tkazish"], correct: 0 },
+  { question: "Mustaqillikning dastlabki yillarida yangi fanlar qaysilar edi?", answers: ["Odobnoma va Huquqshunoslik", "Geometriya va Fizika", "Tibbiyot", "Sotsiologiya"], correct: 0 },
+  { question: "Diniy ta’lim muassasalari faoliyati qachon tiklangan?", answers: ["1989", "1991", "1993", "1995"], correct: 1 },
+  { question: "Yangi o‘quv darsliklari qachon yaratilgan?", answers: ["1991–1995 yillar", "1997–2000 yillar", "2001–2005 yillar", "1990-yillar oxiri"], correct: 0 },
+  { question: "Mustaqillikning ilk yillarida o‘qituvchilar maqomi qanday o‘zgardi?", answers: ["Yaxshilandi", "Pasaydi", "O‘zgarmadi", "Yo‘qoldi"], correct: 0 },
+  { question: "Ta’lim tizimida qanday yangi turlar paydo bo‘ldi?", answers: ["Xususiy maktablar", "Harbiy litseylar", "Xalqaro maktablar", "Barchasi"], correct: 3 },
+  { question: "Birinchi Prezident ta’limga qanday e’tibor bergan?", answers: ["Ustuvor soha sifatida belgilagan", "Ikkinchi darajali soha deb bilgan", "E’tibor bermagan", "Cheklagan"], correct: 0 },
+  { question: "Ta’limdagi islohotlar natijasida qanday tizim joriy etilgan?", answers: ["Uzluksiz ta’lim tizimi", "Sovet tizimi", "Harbiy tizim", "Hududiy tizim"], correct: 0 },
+  { question: "“Uzluksiz ta’lim tizimi” deganda nima tushuniladi?", answers: ["Maktabdan boshlab oliy ta’limgacha izchil ta’lim", "Faqat maktab ta’limi", "Masofaviy o‘qish", "Xalq ta’limi"], correct: 0 },
+  { question: "Ta’limdagi islohotlar nechta yo‘nalishda olib borilgan?", answers: ["3", "4", "5", "6"], correct: 2 },
+  { question: "Ta’lim tizimida axborot texnologiyalari qachon joriy etila boshlandi?", answers: ["1990-yillar oxiri", "2000-yillar boshida", "1995", "1985"], correct: 0 },
+  { question: "2000-yillarga kelib qaysi o‘quv tizimi shakllandi?", answers: ["9+3 tizimi", "12 yillik tizim", "8 yillik tizim", "6 yillik tizim"], correct: 0 },
+  { question: "Ta’lim sifatini nazorat qilish uchun qanday organ tashkil etilgan?", answers: ["Davlat test markazi", "Xalq ta’limi vazirligi", "Oliy Majlis", "Monitoring markazi"], correct: 0 },
+  { question: "Davlat test markazi qachon tashkil etilgan?", answers: ["1991", "1992", "1993", "1994"], correct: 2 },
+  { question: "DTMning asosiy vazifasi nima?", answers: ["Abituriyentlarni ro‘yxatga olish", "Test sinovlarini o‘tkazish", "Maktablarni tekshirish", "Ta’limni boshqarish"], correct: 1 },
+  { question: "Ta’lim tizimida yangi baholash tizimi qachon joriy etildi?", answers: ["1997", "2000", "2005", "2010"], correct: 1 },
+  { question: "Mustaqillikdan keyin qaysi xorijiy tillarni o‘qitish kuchaytirildi?", answers: ["Rus tili", "Ingliz tili", "Arab tili", "Fransuz tili"], correct: 1 },
+  { question: "Oliy o‘quv yurtlariga kirish qanday tizim asosida amalga oshirila boshlandi?", answers: ["Test tizimi", "Suhbat", "Tanlov", "Ball tizimi"], correct: 0 },
+  { question: "1990-yillar o‘rtalarida nechta oliy o‘quv yurtlari faoliyat yuritgan?", answers: ["50 dan ortiq", "100 dan ortiq", "70 dan ortiq", "30 dan kam"], correct: 1 },
+  { question: "Xususiy ta’lim muassasalari faoliyatiga ruxsat berildimi?", answers: ["Ha", "Yo‘q", "Faqat maktablarda", "Cheklangan"], correct: 0 },
+  { question: "“Yoshlar siyosati” ta’lim bilan qanday bog‘liq edi?", answers: ["Kadrlar tayyorlashga yo‘naltirilgan", "Sportni rivojlantirgan", "Faoliyatni kamaytirgan", "Alakasiz"], correct: 0 },
+  { question: "Mustaqillikdan keyin ta’limda qanday yo‘nalish ustuvor bo‘ldi?", answers: ["Milliy qadriyatlarga asoslangan ta’lim", "Xorijiy tizimni ko‘chirish", "Sovet dasturi", "Eksperimental ta’lim"], correct: 0 },
+  { question: "Ta’limdagi islohotlarning natijasi sifatida nima paydo bo‘ldi?", answers: ["Yangi avlod mutaxassislari", "Ishsizlik", "Tizim inqirozi", "Fanlar qisqarishi"], correct: 0 },
+  { question: "Mustaqillikdan so‘ng qaysi fanlar qayta kiritilgan?", answers: ["Tarix va Din tarixi", "Fizika", "Geometriya", "Kimyo"], correct: 0 },
+  { question: "Ta’lim sohasidagi dastlabki yirik hujjat qaysi edi?", answers: ["Kadrlar tayyorlash milliy dasturi", "1992-yilgi farmon", "Konstitutsiya", "Maktab to‘g‘risidagi nizom"], correct: 0 },
+  { question: "Ta’lim tizimida milliy o‘zlikni anglash qanday ifodalangan?", answers: ["Darsliklar mazmunida", "Sport tadbirlarida", "Televideniyeda", "Tashkiliy yig‘ilishlarda"], correct: 0 },
+  { question: "O‘qituvchilarning malakasini oshirish tizimi qachon joriy etilgan?", answers: ["1997-yilda", "2000-yilda", "2003-yilda", "1995-yilda"], correct: 0 },
+  { question: "Mustaqillikdan keyingi ta’lim siyosati nimalarga asoslangan?", answers: ["Milliy qadriyat va zamonaviy talablar uyg‘unligi", "Sovet tajribasi", "Chetdan ko‘chirish", "Qisqartirish"], correct: 0 },
+  { question: "Kadrlar tayyorlash milliy dasturi nechta bosqichda amalga oshirilgan?", answers: ["3 bosqichda", "4 bosqichda", "5 bosqichda", "2 bosqichda"], correct: 0 },
+  { question: "O‘zbekiston ta’lim tizimida informatika fani qachon joriy etilgan?", answers: ["1990-yillar", "1985-yillar", "2000-yillar", "1999-yillar"], correct: 0 },
+  { question: "Mustaqillik yillarida ta’limda qanday shior ilgari surilgan?", answers: ["Kelajak yoshlar qo‘lida", "Ta’lim — yurt kelajagi", "Bilim — kuch", "Fan — taraqqiyot kaliti"], correct: 1 },
+  { question: "O‘zbekistonning ta’lim tizimi qaysi g‘oyaga asoslangan?", answers: ["Inson manfaatlari ustuvorligi", "Iqtisodiy foyda", "Raqobatbardoshlik", "Ma’muriy boshqaruv"], correct: 0 },
+  { question: "Mustaqillikning ilk yillarida xalqaro ta’lim loyihalari qanday rol o‘ynagan?", answers: ["Yordamchi rol", "Yetakchi rol", "E’tiborsiz", "Ta’qiqlangan"], correct: 0 }
+];
+
+
+// ------------------------
+// 50 ta Ingliz savol (namuna, siz o'zingizning 50 ta savolni shu tarzda qo'shasiz)
+// ------------------------
+const questionsEN = [
+  { question: "What was the most important task in the education system during the early years of independence?", answers: ["Creating new programs", "Reforming education", "Reducing teachers", "Closing private schools"], correct: 1 },
+  { question: "On what document were education reforms based?", answers: ["Constitution", "Law on Education", "National Program", "Decree"], correct: 2 },
+  { question: "When was the National Program for Personnel Training adopted?", answers: ["1995", "1997", "1998", "2000"], correct: 1 },
+  { question: "When was the 'Law on Education' adopted?", answers: ["1992", "1994", "1997", "1999"], correct: 2 },
+  { question: "What was the goal of the National Program for Personnel Training?", answers: ["Creating new textbooks", "Equipping youth with modern knowledge", "Repairing schools", "Teacher certification"], correct: 1 },
+  { question: "How many levels were introduced into the education system after independence?", answers: ["2-level", "3-level", "4-level", "5-level"], correct: 1 },
+  { question: "Which is the first stage of the education system?", answers: ["Higher education", "General secondary education", "College", "Lyceum"], correct: 1 },
+  { question: "When were academic lyceums and vocational colleges established?", answers: ["1995–1997", "1998–2001", "2002–2005", "1993–1994"], correct: 1 },
+  { question: "Under whose leadership were education reforms carried out?", answers: ["Islam Karimov", "Shavkat Mirziyoyev", "Abdulla Oripov", "Oliy Majlis"], correct: 0 },
+  { question: "Which article of the Constitution of Uzbekistan is related to education?", answers: ["Article 41", "Article 20", "Article 10", "Article 15"], correct: 0 },
+  { question: "What does Article 41 guarantee?", answers: ["The right of every citizen to education", "Only preschool education", "Private education", "Only higher education"], correct: 0 },
+  { question: "What direction did the education system take after independence?", answers: ["Centralized system", "Market-oriented system", "Soviet system", "Military system"], correct: 1 },
+  { question: "When did international cooperation in education expand?", answers: ["Mid-1990s", "Early 2000s", "1980s", "2010s"], correct: 0 },
+  { question: "How many stages does the National Program for Personnel Training have?", answers: ["2", "3", "4", "5"], correct: 1 },
+  { question: "What replaced the 9-year compulsory education system?", answers: ["11-year compulsory education", "12-year system", "9+3 system", "Market system"], correct: 2 },
+  { question: "What was the main goal of opening vocational colleges?", answers: ["Reduce unemployment", "Teach youth professional skills", "Develop sports", "Promote culture"], correct: 1 },
+  { question: "What was the main purpose of academic lyceums?", answers: ["Prepare for higher education", "Provide professions", "Employment", "Organize events"], correct: 0 },
+  { question: "Which new subjects appeared in the early years of independence?", answers: ["Ethics and Law Studies", "Geometry and Physics", "Medicine", "Sociology"], correct: 0 },
+  { question: "When was the activity of religious education institutions restored?", answers: ["1989", "1991", "1993", "1995"], correct: 1 },
+  { question: "When were new textbooks created?", answers: ["1991–1995", "1997–2000", "2001–2005", "Late 1990s"], correct: 0 },
+  { question: "How did the status of teachers change in the early years of independence?", answers: ["Improved", "Decreased", "Unchanged", "Disappeared"], correct: 0 },
+  { question: "What new types of education appeared?", answers: ["Private schools", "Military lyceums", "International schools", "All of them"], correct: 3 },
+  { question: "How did the first President prioritize education?", answers: ["As a top priority", "As a secondary sector", "Ignored it", "Restricted it"], correct: 0 },
+  { question: "What system was introduced as a result of educational reforms?", answers: ["Continuous education system", "Soviet system", "Military system", "Regional system"], correct: 0 },
+  { question: "What does 'Continuous Education System' mean?", answers: ["Education from school to university", "Only school education", "Distance learning", "Public education"], correct: 0 },
+  { question: "In how many directions were education reforms carried out?", answers: ["3", "4", "5", "6"], correct: 2 },
+  { question: "When were information technologies introduced into the education system?", answers: ["Late 1990s", "Early 2000s", "1995", "1985"], correct: 0 },
+  { question: "Which education model was formed by the 2000s?", answers: ["9+3 system", "12-year system", "8-year system", "6-year system"], correct: 0 },
+  { question: "Which body was established to monitor the quality of education?", answers: ["State Testing Center", "Ministry of Public Education", "Oliy Majlis", "Monitoring Center"], correct: 0 },
+  { question: "When was the State Testing Center established?", answers: ["1991", "1992", "1993", "1994"], correct: 2 },
+  { question: "What is the main function of the State Testing Center?", answers: ["Register applicants", "Conduct test exams", "Inspect schools", "Manage education"], correct: 1 },
+  { question: "When was the new grading system introduced in education?", answers: ["1997", "2000", "2005", "2010"], correct: 1 },
+  { question: "Which foreign languages began to be taught more actively after independence?", answers: ["Russian", "English", "Arabic", "French"], correct: 1 },
+  { question: "Based on what system did university admissions begin?", answers: ["Test system", "Interview", "Selection", "Point system"], correct: 0 },
+  { question: "How many higher education institutions operated in the mid-1990s?", answers: ["More than 50", "More than 100", "More than 70", "Less than 30"], correct: 1 },
+  { question: "Were private educational institutions allowed to operate?", answers: ["Yes", "No", "Only in schools", "Limited"], correct: 0 },
+  { question: "How was 'Youth Policy' related to education?", answers: ["Aimed at training personnel", "Developed sports", "Reduced activity", "Unrelated"], correct: 0 },
+  { question: "Which direction became a priority in education after independence?", answers: ["Education based on national values", "Copying foreign systems", "Soviet program", "Experimental education"], correct: 0 },
+  { question: "What emerged as a result of educational reforms?", answers: ["A new generation of specialists", "Unemployment", "System crisis", "Reduction of subjects"], correct: 0 },
+  { question: "Which subjects were reintroduced after independence?", answers: ["History and History of Religion", "Physics", "Geometry", "Chemistry"], correct: 0 },
+  { question: "What was the first major document in the field of education?", answers: ["National Program for Personnel Training", "1992 Decree", "Constitution", "School Charter"], correct: 0 },
+  { question: "How was national identity reflected in the education system?", answers: ["In the content of textbooks", "In sports events", "On television", "In meetings"], correct: 0 },
+  { question: "When was the system for improving teachers’ qualifications introduced?", answers: ["In 1997", "In 2000", "In 2003", "In 1995"], correct: 0 },
+  { question: "What was the education policy after independence based on?", answers: ["Harmony of national values and modern demands", "Soviet experience", "Foreign imitation", "Reduction"], correct: 0 },
+  { question: "In how many stages was the National Program for Personnel Training implemented?", answers: ["In 3 stages", "In 4 stages", "In 5 stages", "In 2 stages"], correct: 0 },
+  { question: "When was computer science introduced into Uzbekistan’s education system?", answers: ["1990s", "1985s", "2000s", "1999s"], correct: 0 },
+  { question: "What was the slogan promoted in education during the years of independence?", answers: ["The future is in the hands of youth", "Education — the future of the nation", "Knowledge is power", "Science is the key to progress"], correct: 1 },
+  { question: "On what idea is Uzbekistan’s education system based?", answers: ["Priority of human interests", "Economic benefit", "Competitiveness", "Administrative control"], correct: 0 },
+  { question: "What role did international educational projects play in the early years of independence?", answers: ["Supportive role", "Leading role", "Ignored", "Prohibited"], correct: 0 }
+];
+
+
+// ------------------------
+// 2. Rasmlar
+// ------------------------
+const images = [
+  "history.img/independence.jfif",
+  "history.img/independence2.jfif",
+  "history.img/independence3.jfif",
+  "history.img/independence4.jfif",
+  "history.img/independence5.jfif",
+  "history.img/IslomKarimov.jfif",
+  "history.img/ShavkatMirziyoyev.jfif"
+];
+
+// ------------------------
+// 3. Tilni tanlash
+// ------------------------
+let currentLang = localStorage.getItem("lang") || "uz";
+const langSelect = document.getElementById("languageSelect");
+langSelect.value = currentLang;
+langSelect.addEventListener("change", e => {
+  localStorage.setItem("lang", e.target.value);
+  location.reload();
+});
+
+function getQuestionsByLang(lang) {
+  if (lang === "en") return [...questionsEN];
+  return [...questionsUZ];
+}
+let allQuestions = getQuestionsByLang(currentLang);
+
+// Rasmlarni qo‘shish
+allQuestions.forEach((q, i) => q.img = images[i % images.length]);
+
+// ------------------------
+// 4. Test logikasi
+// ------------------------
+const questions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0,15);
+let current = 0, correctAnswers = 0;
+const wrongQuestions = [];
+const container = document.getElementById("quiz-container");
+let timer;
+let timeLeft = 15;
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// ------------------------
+// 5. Savolni ko'rsatish
+// ------------------------
+function showQuestion() {
+  const q = questions[current];
+  const answersShuffled = q.answers.map((a, i) => ({ text: a, index: i }));
+  shuffle(answersShuffled);
+  q.shuffledAnswers = answersShuffled;
+  q.correctShuffledIndex = answersShuffled.findIndex(a => a.index === q.correct);
+
+  timeLeft = 20;
+  clearInterval(timer);
+
+  // HTML tuzilmasini oldin yaratamiz
+  container.innerHTML = `
+    <section>
+      ${q.img ? `<img src="${q.img}" alt="rasm">` : ""}
+      <h1>${q.question}</h1>
+      <div class="answers">
+        ${answersShuffled.map((a, i) => `<button onclick="checkAnswer(${i}, this)">${a.text}</button>`).join("")}
+      </div>
+      <p>Savol ${current + 1}/${questions.length}</p>
+      <p id="timer" style="font-weight: bold;">⏱️ Qolgan vaqt: 20s</p>
+    </section>
+  `;
+
+  const timerP = document.getElementById("timer");
+
+  // Timer boshlanishi
+  timer = setInterval(() => {
+    timeLeft--;
+
+    // Rangni o'zgartirish
+    if (timeLeft <= 5) {
+      timerP.style.color = "red";
+    } else {
+      timerP.style.color = "white";
+    }
+
+    timerP.textContent = `⏱️ Qolgan vaqt: ${timeLeft}s`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      checkAnswer(-1); // vaqt tugadi
+    }
+  }, 1000);
+}
+
+// ------------------------
+// 6. Javobni tekshirish
+// ------------------------
+function checkAnswer(selected, btn = null) {
+  const q = questions[current];
+  const buttons = document.querySelectorAll(".answers button");
+
+  buttons.forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correctShuffledIndex) b.style.backgroundColor = "limegreen";
+    else if (i === selected) b.style.backgroundColor = "crimson";
+  });
+
+  if (selected === q.correctShuffledIndex) correctAnswers++;
+  else wrongQuestions.push({ question: q.question, correct: q.answers[q.correct] });
+
+  clearInterval(timer);
+  setTimeout(() => {
+    current++;
+    if (current < questions.length) showQuestion();
+    else showResult();
+  }, 1000);
+}
+
+// ------------------------
+// 7. Natijani ko'rsatish
+// ------------------------
+function showResult() {
+  const percent = Math.round((correctAnswers / questions.length) * 100);
+  const text =
+    percent === 100
+      ? "🔥 Ajoyib! Barchasi to‘g‘ri!"
+      : percent >= 60
+      ? "👍 Yaxshi natija!"
+      : "Yana harakat qilib ko‘ring!";
+
+  const wrongHTML = wrongQuestions.length
+    ? `
+    <h2 class="mt-4">❌ Noto‘g‘ri javoblar:</h2>
+    <ul class="text-left mt-2">
+      ${wrongQuestions
+        .map((w) => `<li>${w.question} — ✅ ${w.correct}</li>`)
+        .join("")}
+    </ul>`
+    : "";
+
+  container.innerHTML = `
+    <section>
+      <h1>Test yakunlandi!</h1>
+      <p>Siz ${percent}% to‘g‘ri topdingiz.</p>
+      <p class="mt-4">${text}</p>
+      ${wrongHTML}
+      <button onclick="restartQuiz()" class="mt-6 bg-white text-blue-700 px-4 py-2 rounded-md font-bold hover:bg-gray-200">Qayta boshlash</button>
+    </section>
+  `;
+}
+
+// ------------------------
+// 8. Qayta boshlash
+// ------------------------
+function restartQuiz() {
+  current = 0;
+  correctAnswers = 0;
+  wrongQuestions.length = 0;
+  showQuestion();
+}
+
+// ------------------------
+// 9. Testni boshlash
+// ------------------------
+showQuestion();
+
+
+  </script>
+</body>
+</html>
