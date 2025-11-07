@@ -23,6 +23,7 @@
     }
     .questions section {
       padding: 20px;
+      margin-top: 40px;
       border-radius: 12px;
       text-align: center;
       width: 100%;
@@ -211,76 +212,94 @@ function shuffle(array) {
 // ------------------------
 function showQuestion() {
   const q = questions[current];
-  const answersShuffled = q.answers.map((a, i) => ({text: a, index: i}));
+  const answersShuffled = q.answers.map((a, i) => ({ text: a, index: i }));
   shuffle(answersShuffled);
   q.shuffledAnswers = answersShuffled;
   q.correctShuffledIndex = answersShuffled.findIndex(a => a.index === q.correct);
 
   timeLeft = 20;
   clearInterval(timer);
-  timer = setInterval(() => {
-    timeLeft--;
-    document.getElementById("timer")?.remove();
-    const timerP = document.createElement("p");
-    timerP.id = "timer";
-    timerP.textContent = `⏱️ Qolgan vaqt: ${timeLeft}s`;
-    container.querySelector("section")?.appendChild(timerP);
 
-    if(timeLeft <= 0){
-      clearInterval(timer);
-      checkAnswer(-1); // vaqt tugadi
-    }
-  },1000);
-
+  // HTML tuzilmasini oldin yaratamiz
   container.innerHTML = `
     <section>
       ${q.img ? `<img src="${q.img}" alt="rasm">` : ""}
       <h1>${q.question}</h1>
       <div class="answers">
-        ${answersShuffled.map((a,i)=>`<button onclick="checkAnswer(${i}, this)">${a.text}</button>`).join("")}
+        ${answersShuffled.map((a, i) => `<button onclick="checkAnswer(${i}, this)">${a.text}</button>`).join("")}
       </div>
       <p>Savol ${current + 1}/${questions.length}</p>
-      <p id="timer">⏱️ Qolgan vaqt: 20s</p>
+      <p id="timer" style="font-weight: bold;">⏱️ Qolgan vaqt: 20s</p>
     </section>
   `;
+
+  const timerP = document.getElementById("timer");
+
+  // Timer boshlanishi
+  timer = setInterval(() => {
+    timeLeft--;
+
+    // Rangni o'zgartirish
+    if (timeLeft <= 5) {
+      timerP.style.color = "red";
+    } else {
+      timerP.style.color = "white";
+    }
+
+    timerP.textContent = `⏱️ Qolgan vaqt: ${timeLeft}s`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      checkAnswer(-1); // vaqt tugadi
+    }
+  }, 1000);
 }
 
 // ------------------------
 // 6. Javobni tekshirish
 // ------------------------
-function checkAnswer(selected, btn=null) {
+function checkAnswer(selected, btn = null) {
   const q = questions[current];
   const buttons = document.querySelectorAll(".answers button");
 
-  buttons.forEach((b,i)=>{
+  buttons.forEach((b, i) => {
     b.disabled = true;
-    if(i===q.correctShuffledIndex) b.style.backgroundColor="limegreen";
-    else if(i===selected) b.style.backgroundColor="crimson";
+    if (i === q.correctShuffledIndex) b.style.backgroundColor = "limegreen";
+    else if (i === selected) b.style.backgroundColor = "crimson";
   });
 
-  if(selected === q.correctShuffledIndex) correctAnswers++;
-  else wrongQuestions.push({question: q.question, correct: q.answers[q.correct]});
+  if (selected === q.correctShuffledIndex) correctAnswers++;
+  else wrongQuestions.push({ question: q.question, correct: q.answers[q.correct] });
 
   clearInterval(timer);
-  setTimeout(()=>{
+  setTimeout(() => {
     current++;
-    if(current < questions.length) showQuestion();
+    if (current < questions.length) showQuestion();
     else showResult();
-  },1000);
+  }, 1000);
 }
 
 // ------------------------
 // 7. Natijani ko'rsatish
 // ------------------------
 function showResult() {
-  const percent = Math.round((correctAnswers / questions.length)*100);
-  const text = percent === 100 ? "🔥 Ajoyib! Barchasi to‘g‘ri!" : percent>=60 ? "😊 Yaxshi natija!" : "😅 Yana harakat qiling!";
+  const percent = Math.round((correctAnswers / questions.length) * 100);
+  const text =
+    percent === 100
+      ? "🔥 Ajoyib! Barchasi to‘g‘ri!"
+      : percent >= 60
+      ? "😊 Yaxshi natija!"
+      : "😅 Yana harakat qiling!";
 
-  const wrongHTML = wrongQuestions.length ? `
+  const wrongHTML = wrongQuestions.length
+    ? `
     <h2 class="mt-4">❌ Noto‘g‘ri javoblar:</h2>
     <ul class="text-left mt-2">
-      ${wrongQuestions.map(w=>`<li>${w.question} — ✅ ${w.correct}</li>`).join("")}
-    </ul>` : "";
+      ${wrongQuestions
+        .map((w) => `<li>${w.question} — ✅ ${w.correct}</li>`)
+        .join("")}
+    </ul>`
+    : "";
 
   container.innerHTML = `
     <section>
@@ -307,6 +326,7 @@ function restartQuiz() {
 // 9. Testni boshlash
 // ------------------------
 showQuestion();
+
 
   </script>
 </body>
