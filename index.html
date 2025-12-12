@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuizUpia!</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QuizUpia! Exam Kirish</title>
+    <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
 </head>
 <body class="bg-blue-600 relative">
+
     <!-- Til tanlash -->
     <div class="absolute top-2 right-2">
         <select aria-label="Tilni tanlang"
@@ -22,20 +23,18 @@
     <!-- Asosiy blok -->
     <div class="flex flex-col items-center justify-center h-screen">
         <h1 class="kahoot-font text-4xl text-white mb-8" style="font-family: 'Luckiest Guy', cursive;">
-            QuizUpia!
+            QuizUpia! Exam Kirish
         </h1>
 
         <div class="bg-white p-4 rounded-lg shadow-lg w-80 text-center">
             <input id="pinInput" type="text" placeholder="Game PIN"
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" />
 
             <button onclick="checkPIN()"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition">
                 Enter
             </button>
         </div>
-
-        <a href="create.html" class="text-white font-bold mt-4 cursor-pointer">Create a game</a>
     </div>
 
     <script>
@@ -46,18 +45,13 @@
                 alert("⚠️ Iltimos, PIN kiriting!");
             } 
             else if (userPIN === "0317") {
-                window.location.href = "history.html"; // Kod 0317 → history sahifasi
-            } 
-            else if (userPIN === "Xayrullayeva0527") {
-                window.location.href = "questions.html"; // Kod Xayrullayeva0527 → questions sahifasi
-            } 
-            else if (userPIN === "0527") {
-                window.location.href = "mustaqillik.html"; // Yangi qo‘shilgan: kod 0527 → mustaqillik sahifasi
+                window.location.href = "exam.html";
             }
             else {
                 alert("❌ Noto‘g‘ri PIN! Qayta urinib ko‘ring.");
             }
         }
     </script>
+
 </body>
 </html>
